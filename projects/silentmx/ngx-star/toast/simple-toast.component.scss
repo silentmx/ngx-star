@@ -1,0 +1,82 @@
+.ngx-simple-toast {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  place-content: flex-start;
+  align-items: center;
+  color: #FFFFFF;
+  min-height: 48px;
+  padding: 10px 12px;
+  position: relative;
+
+  .close {
+    cursor: pointer;
+    &::before {
+      content: " ";
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      height: 20px;
+      width: 20px;
+      background-image: url("./images/error.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  }
+
+  .message {
+    margin: 0 20px 0 40px;
+  }
+  
+  &.success {
+    background-color: #43a047;
+    &::before {
+      content: " ";
+      position: absolute;
+      height: 35px;
+      width: 35px;
+      background-image: url("./images/success.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  }
+
+  &.info {
+    background-color: #2f96b4;
+    &::before {
+      content: " ";
+      position: absolute;
+      height: 35px;
+      width: 35px;
+      background-image: url("./images/info.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  }
+
+  &.warn {
+    background-color: #f89406;
+    &::before {
+      content: " ";
+      position: absolute;
+      height: 35px;
+      width: 35px;
+      background-image: url("./images/warn.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  }
+
+  &.error {
+    background-color: #bd362f;
+    &::before {
+      content: " ";
+      position: absolute;
+      height: 25px;
+      width: 25px;
+      background-image: url("./images/error.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  }
+}

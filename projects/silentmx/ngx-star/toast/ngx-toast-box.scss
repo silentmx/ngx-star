@@ -1,0 +1,40 @@
+$ngx-toast-spacing-margin-handset: 8px !default;
+$ngx-toast-min-height: 48px !default;
+$ngx-toast-min-height-handset: 40px !default;
+$ngx-toast-min-width: 344px !default;
+$ngx-toast-max-width: 33vw !default;
+$ngx-toast-spacing-margin: 12px !default;
+
+.ngx-toast-box {
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: block;
+  margin: $ngx-toast-spacing-margin;
+  max-width: $ngx-toast-max-width;
+  min-width: $ngx-toast-min-width;
+  min-height: $ngx-toast-min-height;
+  transform-origin: center;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  
+  &:hover {
+    transform: translateX(-3px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/**
+ * The mat-snack-bar-handset class will be applied to the overlay
+ * element causing styling to both it and the snack bar container.
+ */
+ .ngx-toast-handset {
+  width: 100%;
+
+  .ngx-toast-box {
+    margin: $ngx-toast-spacing-margin-handset;
+    min-height: $ngx-toast-min-height-handset;
+    max-width: 100%;
+    min-width: 0px;
+  }
+}
