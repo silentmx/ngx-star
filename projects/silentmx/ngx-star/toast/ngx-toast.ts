@@ -119,6 +119,9 @@ export class NgxToast {
     });
 
     toastRef.container.instance.completeEnter().subscribe(() => {
+      toastRef.container.instance.exitByClick().subscribe(() => {
+        toastRef.dismiss();
+      });
       toastRef.dismissAfter(config.duration);
     });
     toastRef.container.instance.completeExit().subscribe(() => {

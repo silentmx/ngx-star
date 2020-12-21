@@ -12,6 +12,6 @@ export class AppComponent {
   constructor(
     private ngxToast: NgxToast
   ) {
-    this.ngxToast.success("ok");
+    this.ngxToast.success("okfsdfsdfsd fds f dsfsd ffsdf sdf dsf sdf sdf sdf dsf sdf sf df sd");
   }
 }

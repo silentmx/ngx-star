@@ -4,14 +4,14 @@
   "description": "Angular project common components",
   "repository": {
     "type": "git",
-    "url": "https://github.com/silentmx/ngx-start.git"
+    "url": "https://github.com/silentmx/ngx-star.git"
   },
   "keywords": [
     "angular",
     "toast"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/silentmx/ngx-start#readme",
+  "homepage": "https://github.com/silentmx/ngx-star#readme",
   "peerDependencies": {
     "@angular/common": ">=11.0.0",
     "@angular/core": ">=11.0.0",

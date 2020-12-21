@@ -22,7 +22,7 @@ export class NgxToastConfig<D = any> {
   /**
    * The length of time in millinseconds to wait before automatically dismissing the toast.
    */
-  duration?: number = 0;
+  duration?: number = 3000;
 
   /**
    * Data being injected into the child component.

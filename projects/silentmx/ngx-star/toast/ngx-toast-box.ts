@@ -36,6 +36,9 @@ export class NgxToastBox implements OnDestroy, OnInit {
   /** Subject for notifying that the toast has finished entering the view. */
   private readonly onEnter: Subject<void> = new Subject<void>();
 
+  /** Exist by click */
+  private readonly _exitByClick: Subject<void> = new Subject<void>();
+
   /** The state of the toast animations. */
   animationState = "void";
 
@@ -77,11 +80,16 @@ export class NgxToastBox implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.animationState = 'visible';
+    this.animationState = "visible";
   }
 
   ngOnDestroy() {
-    this.animationState = 'hidden';
+    this._exitByClick.complete();
+    this.animationState = "hidden";
+  }
+
+  exitByClick() {
+    return this._exitByClick.asObservable();
   }
 
   completeExit() {
@@ -90,6 +98,11 @@ export class NgxToastBox implements OnDestroy, OnInit {
 
   completeEnter() {
     return this.onEnter.asObservable();
+  }
+
+  close() {
+    this._exitByClick.next();
+    this._exitByClick.complete();
   }
 
 }

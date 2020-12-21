@@ -40,13 +40,7 @@ export class NgxToastContainer implements OnDestroy {
     const toastBoxRef = this.toastContainer.createComponent(componentFactory, 0);
     let toastRef = new NgxToastRef<T>();
     toastRef.container = toastBoxRef;
-    const _injector = Injector.create({
-      parent: injector,
-      providers: [
-        { provide: NgxToastRef, useValue: toastRef },
-      ]
-    });
-    toastRef.instance = toastBoxRef.instance.loadToast<T>(component, _injector).instance;
+    toastRef.instance = toastBoxRef.instance.loadToast<T>(component, injector).instance;
     return toastRef;
   }
 
