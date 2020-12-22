@@ -18,6 +18,12 @@ export class NgxLocaleService {
     return NgxLocaleService._languages;
   }
 
+  get currentLanguage(): Language {
+    return NgxLocaleService._languages.find(language => {
+      return language.locale_id == this.ngxLocaleId$.value;
+    });
+  }
+
   constructor(
     @Inject(NGX_LOCALE_ID) private ngxLocaleId$: BehaviorSubject<string>
   ) {
@@ -36,6 +42,11 @@ export class NgxLocaleService {
   }
 
   updateLocale(localeId: string) {
+    // 如果local_id没有变化直接返回
+    if (localeId == this.ngxLocaleId$.value) {
+      return;
+    }
+
     this.ngxLocaleId$.next(localeId);
   }
 
