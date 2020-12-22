@@ -1,5 +1,6 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
-import { NgxLocaleService, NGX_LOCALE_ID } from '@silentmx/ngx-star/locale';
+import { NgxI18nPipe, NgxLocaleService, NGX_LOCALE_ID } from '@silentmx/ngx-star/locale';
 import { NgxToast } from '@silentmx/ngx-star/toast';
 import { BehaviorSubject } from 'rxjs';
 
@@ -23,9 +24,27 @@ export class AppComponent {
   constructor(
     private ngxToast: NgxToast,
     private ngxLocaleService: NgxLocaleService,
+    private httpClient: HttpClient,
+    private ngxI18n: NgxI18nPipe,
     @Inject(NGX_LOCALE_ID) public ngxLocaleId$: BehaviorSubject<string>,
   ) {
-    this.ngxToast.success("okfsdfsdfsd fds f dsfsd ffsdf sdf dsf sdf sdf sdf dsf sdf sf df sd");
+
+    ngxLocaleId$.subscribe(locale => {
+      this.httpClient.get<any>("https://console.huoshicloud.com/api/abp/application-configuration", {
+        headers: new HttpHeaders({
+          "accept-language": locale
+        })
+      }).subscribe(res => {
+        let obj = {};
+        for (let key of Object.keys(res.localization.values)) {
+          obj = { ...obj, ...res.localization.values[key] }
+        }
+        this.ngxI18n.updateDataSource(obj);
+      }, error => {
+        this.ngxToast.error(error);
+      })
+    })
+
   }
 
   changeLocale() {

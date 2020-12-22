@@ -1,8 +1,12 @@
 <div>
   {{date | date: "full"}}
 </div>
-<div>{{ngxLocaleId$ | async}}</div>
 
+<div>
+  {{"'{0}' and '{1}' do not match." | ngxI18n: "ok"}}
+</div>
+
+<div>{{ngxLocaleId$ | async}}</div>
 <select [(ngModel)]="localeId" (change)="changeLocale()">
   <option value="{{item.value}}" *ngFor="let item of localeOptions">{{item.name}}</option>
 </select>
