@@ -1,6 +1,6 @@
 {
   "name": "@silentmx/ngx-star",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Angular project common components",
   "repository": {
     "type": "git",
@@ -8,7 +8,8 @@
   },
   "keywords": [
     "angular",
-    "toast"
+    "toast",
+    "locale"
   ],
   "license": "MIT",
   "homepage": "https://github.com/silentmx/ngx-star#readme",

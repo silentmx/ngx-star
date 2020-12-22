@@ -12,18 +12,10 @@ import { BehaviorSubject } from 'rxjs';
 export class AppComponent {
   date = new Date();
   localeId: string = "zh-Hans";
-  localeOptions = [
-    { name: "简体中文", value: "zh-Hans" },
-    { name: "繁体中文", value: "zh-Hant" },
-    { name: "English", value: "en" },
-    { name: "日语", value: "ja" },
-    { name: "德语", value: "de" },
-    { name: "法语", value: "fr" }
-  ];
 
   constructor(
     private ngxToast: NgxToast,
-    private ngxLocaleService: NgxLocaleService,
+    public ngxLocaleService: NgxLocaleService,
     private httpClient: HttpClient,
     private ngxI18n: NgxI18nPipe,
     @Inject(NGX_LOCALE_ID) public ngxLocaleId$: BehaviorSubject<string>,
@@ -40,6 +32,17 @@ export class AppComponent {
           obj = { ...obj, ...res.localization.values[key] }
         }
         this.ngxI18n.updateDataSource(obj);
+
+        this.ngxLocaleService.updateLanguages(res.localization.languages.map(item => {
+          return {
+            locale_id: item.cultureName,
+            name: item.displayName
+          }
+        }));
+        this.ngxToast.error({
+          message: "'{0}' and '{1}' do not match.",
+          args: ["ok", "fsd", "ssss"]
+        });
       }, error => {
         this.ngxToast.error(error);
       })
@@ -48,6 +51,7 @@ export class AppComponent {
   }
 
   changeLocale() {
+    console.log(this.localeId);
     this.ngxLocaleService.updateLocale(this.localeId);
   }
 }

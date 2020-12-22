@@ -3,10 +3,10 @@
 </div>
 
 <div>
-  {{"'{0}' and '{1}' do not match." | ngxI18n: "ok"}}
+  {{"'{0}' and '{1}' do not match." | ngxI18n: ["ok", "error"]}}
 </div>
 
 <div>{{ngxLocaleId$ | async}}</div>
 <select [(ngModel)]="localeId" (change)="changeLocale()">
-  <option value="{{item.value}}" *ngFor="let item of localeOptions">{{item.name}}</option>
+  <option value="{{item.locale_id}}" [selected]="item.isSelect" *ngFor="let item of ngxLocaleService.languages">{{item.name}}</option>
 </select>
