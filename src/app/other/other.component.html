@@ -1,0 +1,13 @@
+<div>other</div>
+<ngx-icon svgIcon="logo" size="80" color="rgba(33, 33, 222)"></ngx-icon>
+<ngx-icon fontIcon="info" color="primary"></ngx-icon>
+<mat-paginator
+    [pageSize]="15"
+    [pageSizeOptions]="[15, 20, 25]"
+    [length]="100"
+    showFirstLastButtons>
+  </mat-paginator>
+
+  <button mat-button (click)="openDeleteDialog()">delete</button>
+
+  <ngx-avatar [size]="100"></ngx-avatar>

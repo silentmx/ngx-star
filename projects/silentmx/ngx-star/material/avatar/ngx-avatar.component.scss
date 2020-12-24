@@ -1,0 +1,11 @@
+.ngx-avatar {
+  background-image: url("./avatar.png");
+  background-size: contain;
+  display: inline-block;
+  border-radius: 50%;
+
+  .avatar-image {
+    height: 100%;
+    width: 100%;
+  }
+}

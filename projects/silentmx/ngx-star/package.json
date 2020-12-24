@@ -1,6 +1,6 @@
 {
   "name": "@silentmx/ngx-star",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Angular project common components",
   "repository": {
     "type": "git",
@@ -18,7 +18,9 @@
     "@angular/core": ">=11.0.0",
     "@angular/cdk": ">=11.0.0",
     "@angular/animations": ">=11.0.0",
-    "@angular/platform-browser": ">=11.0.0"
+    "@angular/platform-browser": ">=11.0.0",
+    "@angular/material": ">=11.0.0",
+    "@angular/flex-layout": ">=11.0.0"
   },
   "dependencies": {
     "tslib": ">=2.0.0"

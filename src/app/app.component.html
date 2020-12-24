@@ -6,6 +6,11 @@
   {{"'{0}' and '{1}' do not match." | ngxI18n: ["ok", "error"]}}
 </div>
 
-<select [(ngModel)]="localeId" (change)="changeLocale()">
-  <option value="{{item.locale_id}}" [selected]="item.isSelect" *ngFor="let item of ngxLocaleService.languages">{{item.name}}</option>
+{{localeId}}
+<select (change)="changeLocale()" [(ngModel)]="localeId">
+  <option [value]="item.locale_id" *ngFor="let item of ngxLocaleService.languages">{{item.name}}</option>
 </select>
+<mat-icon fontIcon="info"></mat-icon>
+<mat-icon svgIcon="logo"></mat-icon>
+
+<router-outlet></router-outlet>

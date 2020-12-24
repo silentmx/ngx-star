@@ -41,37 +41,41 @@ export class NgxToast {
 
   }
 
-  success(message: string, userConfig?: NgxToastConfig): NgxToastRef<SimpleToastComponent> {
+  success(obj: { message: string, args?: string[] }, userConfig?: NgxToastConfig): NgxToastRef<SimpleToastComponent> {
     const config = { ...new NgxToastConfig(), ...this.defaultConfig, ...userConfig };
     config.data = {
-      message: message,
+      message: obj.message,
+      args: obj.args,
       type: "success",
     }
     return this.openFromComponent(SimpleToastComponent, config);
   }
 
-  info(message: string, userConfig?: NgxToastConfig): NgxToastRef<SimpleToastComponent> {
+  info(obj: { message: string, args?: string[] }, userConfig?: NgxToastConfig): NgxToastRef<SimpleToastComponent> {
     const config = { ...new NgxToastConfig(), ...this.defaultConfig, ...userConfig };
     config.data = {
-      message: message,
+      message: obj.message,
+      args: obj.args,
       type: "info",
     }
     return this.openFromComponent(SimpleToastComponent, config);
   }
 
-  warn(message: string, userConfig?: NgxToastConfig): NgxToastRef<SimpleToastComponent> {
+  warn(obj: { message: string, args?: string[] }, userConfig?: NgxToastConfig): NgxToastRef<SimpleToastComponent> {
     const config = { ...new NgxToastConfig(), ...this.defaultConfig, ...userConfig };
     config.data = {
-      message: message,
+      message: obj.message,
+      args: obj.args,
       type: "warn",
     }
     return this.openFromComponent(SimpleToastComponent, config);
   }
 
-  error(message: string, userConfig?: NgxToastConfig): NgxToastRef<SimpleToastComponent> {
+  error(obj: { message: string, args?: string[] }, userConfig?: NgxToastConfig): NgxToastRef<SimpleToastComponent> {
     const config = { ...new NgxToastConfig(), ...this.defaultConfig, ...userConfig };
     config.data = {
-      message: message,
+      message: obj.message,
+      args: obj.args,
       type: "error",
     }
     return this.openFromComponent(SimpleToastComponent, config);

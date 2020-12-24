@@ -1,14 +1,25 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Pipe({
   name: "ngxI18n",
   pure: false
 })
-export class NgxI18nPipe implements PipeTransform {
-  private static dataSource: Map<string, string> = new Map();
+export class NgxI18nPipe implements PipeTransform, OnDestroy {
+  private readonly onUpdate: Subject<void> = new Subject<void>();
+  private static dataSource: Map<string, string> = new Map(); 
 
   updateDataSource(data: { [key: string]: string }) {
     NgxI18nPipe.dataSource = new Map(Object.entries(data));
+    this.onUpdate.next();
+  }
+
+  compleUpdate() {
+    return this.onUpdate;
+  }
+
+  ngOnDestroy() {
+    this.onUpdate.complete();
   }
 
   transform(key: string, args: string[] = []): string {

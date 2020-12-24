@@ -9,7 +9,7 @@ export class SimpleToastComponent {
   /**
    * Data that was injected into the toast
    */
-  data: { message: string, type: string }
+  data: { message: string, type: string, args?: string[] }
 
   constructor(
     @Inject(NGX_TOAST_DATA) data: any
