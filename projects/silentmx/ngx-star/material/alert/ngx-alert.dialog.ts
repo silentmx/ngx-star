@@ -6,12 +6,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class NgxAlertDialog {
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: {
-      message: string,
-      args?: string[],
-      icon?: string,
-      iconColor?: string,
-    },
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<NgxAlertDialog>,
   ) {
 
