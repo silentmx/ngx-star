@@ -4,7 +4,10 @@ import { NgxIconConfig } from './ngx-icon.config';
 
 @Component({
   selector: "ngx-icon",
-  templateUrl: "./ngx-icon.component.html"
+  templateUrl: "./ngx-icon.component.html",
+  host: {
+    "style": "getStyle()",
+  }
 })
 export class NgxIconComponent {
   @Input("fontIcon") fontIcon: string;
@@ -21,6 +24,7 @@ export class NgxIconComponent {
 
   getStyle() {
     return this.sanitizer.bypassSecurityTrustStyle(`
+      display: inline-block;
       line-height: ${this.size ? this.size : this.config.iconSize}px !important;
       height: ${this.size ? this.size : this.config.iconSize}px !important;
       width: ${this.size ? this.size : this.config.iconSize}px !important;
