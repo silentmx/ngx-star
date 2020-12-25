@@ -22,6 +22,7 @@ export class NgxTableDataSource<T> extends DataSource<T> {
   public loading: boolean = false;
   public params$ = new BehaviorSubject<{}>({});
   public errorMsg: string = "";
+  public deleteId: string | number = ""; // 用来标记正在被删除的数据
 
   private readonly renderData = new BehaviorSubject<T[]>([]);
   get datas(): T[] {
