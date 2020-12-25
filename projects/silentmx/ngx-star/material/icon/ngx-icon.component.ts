@@ -6,7 +6,7 @@ import { NgxIconConfig } from './ngx-icon.config';
   selector: "ngx-icon",
   templateUrl: "./ngx-icon.component.html",
   host: {
-    "style": "getStyle()",
+    "[style]": "getStyle()",
   }
 })
 export class NgxIconComponent {
