@@ -1,13 +1,14 @@
-<div>other</div>
-<ngx-icon svgIcon="logo" size="80" color="rgba(33, 33, 222)"></ngx-icon>
-<ngx-icon fontIcon="info" color="primary"></ngx-icon>
-<mat-paginator
-    [pageSize]="15"
-    [pageSizeOptions]="[15, 20, 25]"
-    [length]="100"
-    showFirstLastButtons>
-  </mat-paginator>
-
-  <button mat-button (click)="openDeleteDialog()">delete</button>
-
-  <ngx-avatar [size]="100"></ngx-avatar>
+<form [formGroup]="textForm">
+  <div fxLayout="column" fxLayoutGap="5px" [style.padding]="'10px 0'">
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" required/>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>ConfirmPassword</mat-label>
+      <input matInput formControlName="passwordRepeat" [errorStateMatcher]="errorMatcher"/>
+      <mat-error>{{textForm.errors | json}}</mat-error>
+    </mat-form-field>
+    <mat-error>{{textForm.errors | json}}</mat-error>
+  </div>
+</form>

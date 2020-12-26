@@ -1,32 +1,27 @@
-import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { NgxAlertDialog } from '@silentmx/ngx-star/material';
-
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConfirmErrorMatcher } from '@silentmx/ngx-star/form-util';
 @Component({
   templateUrl: "./other.component.html"
 })
-export class OtherComponent {
+export class OtherComponent implements OnInit {
+  textForm: FormGroup;
+  errorMatcher = new ConfirmErrorMatcher(); // 自定义密码验证
 
   constructor(
-    private dialog: MatDialog,
+    private fb: FormBuilder,
   ) {
 
   }
 
-  // 删除语言
-  openDeleteDialog() {
-    const dialogRef = this.dialog.open(NgxAlertDialog, {
-      width: "400px",
-      data: {
-        message: "LanguageDeletionConfirmationMessage",
-        args: ["简体中文"],
-      }
+  ngOnInit() {
+    this.textForm = this.fb.group({
+      password: ["", {
+        validators: [Validators.required]
+      }],
+      passwordRepeat: ["", {
+        validators: [Validators.required]
+      }]
     });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-    })
   }
-
-
-
 }

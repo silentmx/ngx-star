@@ -37,6 +37,8 @@ export class NgxTableDataSource<T> extends DataSource<T> {
 
   private readonly internalPageChanges = new Subject<void>();
 
+  private readonly internalParams = new BehaviorSubject<{}>({});
+
   // Sort
   private _sort: MatSort | null;
   set sort(sort: MatSort | null) {
@@ -86,43 +88,45 @@ export class NgxTableDataSource<T> extends DataSource<T> {
         this.paginator.initialized
       ) as Observable<PageEvent | void> : of(null);
 
-    const paramsStream = of(this.dataService?.params ? this.dataService.params : {});
-
-    const paramsData = combineLatest([paramsStream, this.params$]).pipe(
+    const paramsStream = combineLatest([
+      of(this.dataService?.params ? this.dataService.params : {}),
+      this.params$,
+    ]).pipe(
       map(([params]) => {
-        this.initPaginator();
         return { ...params, ...this.params$.value };
       })
     );
 
-    const sortedData = combineLatest([paramsData, sortChange]).pipe(
+    combineLatest([paramsStream, sortChange]).pipe(
       map(([params]) => {
         if (this.sort && this.sort.direction) {
-          this.initPaginator();
           return { ...params, ...{ sort: `${this.sort.active} ${this.sort.direction}` } };
         }
         return { ...params, ...{ sort: undefined } };
       })
-    );
+    ).subscribe(params => {
+      this.internalParams.next(params);
+      this.initPaginator();
+    });
 
-    const paginatedData = combineLatest([sortedData, pageChange]).pipe(
-      map(([params]) => {
+    const paginatedStream = pageChange.pipe(
+      map(() => {
         if (this.paginator) {
           return {
-            ...params,
+            ...this.internalParams.value,
             ...{
               skipCount: this.paginator.pageIndex * this.paginator.pageSize,
               maxResultCount: this.paginator.pageSize
             }
           }
         }
-        return params;
+        return this.internalParams.value;
       })
     );
 
     if (this.dataService) {
       this.renderChangesSubscription?.unsubscribe();
-      this.renderChangesSubscription = paginatedData
+      this.renderChangesSubscription = paginatedStream
         .pipe(delay(0))
         .subscribe(params => {
           this.loading = true;
