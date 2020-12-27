@@ -3,5 +3,5 @@
  * @author silentmx
  */
 export * from "./ngx-form-util.module";
-export * from "./validators/confirm.validator";
+export * from "./validators/ngx-confirm.validator";
 

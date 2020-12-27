@@ -7,14 +7,28 @@
 </div>
 
 {{localeId}}
-<select (change)="changeLocale()" [(ngModel)]="localeId">
-  <option [value]="item.locale_id" *ngFor="let item of ngxLocaleService.languages">{{item.name}}</option>
-</select>
-<mat-icon fontIcon="info"></mat-icon>
-<mat-icon svgIcon="logo"></mat-icon>
-
-<button mat-icon-button color="primary">
-  <ngx-icon fontIcon="add-cicle" size="24"></ngx-icon>
+<button mat-button  [matMenuTriggerFor]="menu">
+  <span class="mat-hint">{{ngxLocaleService.currentLanguage?.name}}</span>
+  <ngx-icon fontIcon="language"></ngx-icon>
 </button>
+
+<mat-menu #menu="matMenu" xPosition="before" class="admin-dark-theme mat-app-background">
+  <button mat-menu-item 
+    (click)="ngxLocaleService.updateLocale(language.locale_id)" 
+    *ngFor="let language of ngxLocaleService.languages">
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+      <span class="mat-hint">{{language.name}}</span>
+      <ngx-icon fontIcon="check" *ngIf="language.isSelect"></ngx-icon>
+    </div>
+  </button>
+</mat-menu>
+
+<mat-paginator
+  [length]="100"
+  [pageSize]="15"
+  [pageSizeOptions]="[15, 20, 25]" 
+  showFirstLastButtons>
+</mat-paginator>
+
 
 <router-outlet></router-outlet>

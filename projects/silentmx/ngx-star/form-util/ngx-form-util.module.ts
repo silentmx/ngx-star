@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { NgxLocaleModule } from '@silentmx/ngx-star/locale';
-import { ConfirmValidator } from './validators/confirm.validator';
+import { NgxStopDirective } from './directive/ngx-stop.directive';
+import { NgxConfirmValidator } from './validators/ngx-confirm.validator';
 
 /**
  * Ngx Form module
@@ -8,13 +9,15 @@ import { ConfirmValidator } from './validators/confirm.validator';
  */
 @NgModule({
   imports: [
-    NgxLocaleModule
+    NgxLocaleModule,
   ],
   declarations: [
-    ConfirmValidator
+    NgxConfirmValidator,
+    NgxStopDirective
   ],
   exports: [
-    ConfirmValidator
+    NgxConfirmValidator,
+    NgxStopDirective
   ]
 })
 export class NgxFormUtilModule {

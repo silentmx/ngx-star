@@ -34,7 +34,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NgxI18nPipe, NgxLocaleModule, NGX_LOCALE_ID } from '@silentmx/ngx-star/locale';
+import { NgxLocaleModule, NGX_LOCALE_ID } from '@silentmx/ngx-star/locale';
 import { BehaviorSubject } from 'rxjs';
 import { NgxAlertDialog } from './alert/ngx-alert.dialog';
 import { NgxAvatarComponent } from './avatar/ngx-avatar.component';
@@ -101,7 +101,6 @@ export const ngxComponents = [
     ngxComponents
   ],
   providers: [
-    NgxI18nPipe,
     {
       provide: MatPaginatorIntl,
       useClass: NgxPaginatorIntl,

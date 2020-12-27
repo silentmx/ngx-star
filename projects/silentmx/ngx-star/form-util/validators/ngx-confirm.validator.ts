@@ -12,7 +12,7 @@ import {
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 
-export class ConfirmErrorMatcher implements ErrorStateMatcher {
+export class NgxConfirmErrorMatcher implements ErrorStateMatcher {
   isErrorState(
     control: FormControl | null,
     formGroupDirective: FormGroupDirective | NgForm | null
@@ -25,7 +25,7 @@ export class ConfirmErrorMatcher implements ErrorStateMatcher {
  * 检验两个项值是否相等
  * @author silentmx
  */
-export function confirmValidator(
+export function ngxConfirmValidator(
   control1Name: string = "password",
   control2Name: string = "passwordRepeat"
 ): ValidatorFn {
@@ -45,16 +45,16 @@ export function confirmValidator(
  * @author silentmx
  */
 @Directive({
-  selector: "[confirmValidator]",
+  selector: "[ngxConfirmValidator]",
   providers: [
-    { provide: NG_VALIDATORS, useExisting: ConfirmValidator, multi: true }
+    { provide: NG_VALIDATORS, useExisting: NgxConfirmValidator, multi: true }
   ]
 })
-export class ConfirmValidator implements Validator {
+export class NgxConfirmValidator implements Validator {
   @Input("control1") control1: string = "password";
   @Input("control2") control2: string = "passwordRepeat";
 
   validate(control: AbstractControl): ValidationErrors {
-    return confirmValidator(this.control1, this.control2)(control);
+    return ngxConfirmValidator(this.control1, this.control2)(control);
   }
 }

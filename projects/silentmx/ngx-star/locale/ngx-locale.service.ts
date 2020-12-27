@@ -42,11 +42,6 @@ export class NgxLocaleService {
   }
 
   updateLocale(localeId: string) {
-    // 如果local_id没有变化直接返回
-    if (localeId == this.currentLanguage.locale_id) {
-      return;
-    }
-
     this.ngxLocaleId$.next(localeId);
   }
 

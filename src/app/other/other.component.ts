@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConfirmErrorMatcher } from '@silentmx/ngx-star/form-util';
+import { NgxConfirmErrorMatcher, ngxConfirmValidator } from '@silentmx/ngx-star/form-util';
 @Component({
   templateUrl: "./other.component.html"
 })
 export class OtherComponent implements OnInit {
   textForm: FormGroup;
-  errorMatcher = new ConfirmErrorMatcher(); // 自定义密码验证
+  errorMatcher = new NgxConfirmErrorMatcher(); // 自定义密码验证
+  hero = {
+    name: "silentmx"
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -22,6 +25,8 @@ export class OtherComponent implements OnInit {
       passwordRepeat: ["", {
         validators: [Validators.required]
       }]
+    }, {
+      validators: [ngxConfirmValidator()]
     });
   }
 }
