@@ -11,7 +11,6 @@ import { OtherComponent } from './other.component';
     NgxLocaleModule,
     NgxMaterialModule,
     ReactiveFormsModule,
-    // FormsModule,
     NgxFormUtilModule,
     OtherRoutingModule
   ],

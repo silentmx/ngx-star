@@ -1,7 +1,15 @@
 import { DataSource } from '@angular/cdk/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { BehaviorSubject, combineLatest, merge, Observable, of, Subject, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  merge,
+  Observable,
+  of,
+  Subject,
+  Subscription
+} from 'rxjs';
 import { catchError, delay, finalize, map } from 'rxjs/operators';
 
 export interface SearchConfig {
@@ -34,10 +42,9 @@ export class NgxTableDataSource<T> extends DataSource<T> {
    * such as filtering, sorting, pagination, or base data changes.
    */
   private renderChangesSubscription = Subscription.EMPTY;
+  private pageInitSubscription = Subscription.EMPTY;
 
   private readonly internalPageChanges = new Subject<void>();
-
-  private readonly internalParams = new BehaviorSubject<{}>({});
 
   // Sort
   private _sort: MatSort | null;
@@ -78,6 +85,8 @@ export class NgxTableDataSource<T> extends DataSource<T> {
 
 
   private updateChangesSubscription() {
+    const originalParams = this.dataService?.params ? this.dataService.params : {};
+
     const sortChange: Observable<Sort | null | void> = this.sort ?
       merge(this.sort.sortChange, this.sort.initialized) as Observable<Sort | void> : of(null);
 
@@ -88,45 +97,49 @@ export class NgxTableDataSource<T> extends DataSource<T> {
         this.paginator.initialized
       ) as Observable<PageEvent | void> : of(null);
 
-    const paramsStream = combineLatest([
-      of(this.dataService?.params ? this.dataService.params : {}),
-      this.params$,
-    ]).pipe(
-      map(([params]) => {
-        return { ...params, ...this.params$.value };
-      })
-    );
-
-    combineLatest([paramsStream, sortChange]).pipe(
-      map(([params]) => {
-        if (this.sort && this.sort.direction) {
-          return { ...params, ...{ sort: `${this.sort.active} ${this.sort.direction}` } };
-        }
-        return { ...params, ...{ sort: undefined } };
-      })
-    ).subscribe(params => {
-      this.internalParams.next(params);
-      this.initPaginator();
+    this.pageInitSubscription?.unsubscribe();
+    this.pageInitSubscription = combineLatest([this.params$, sortChange]).subscribe(() => {
+      if (this.paginator && this.paginator.pageIndex > 0) {
+        this.paginator.pageIndex = 0;
+      }
+      this.internalPageChanges.next();
     });
-
-    const paginatedStream = pageChange.pipe(
+  
+    const paramsStream = pageChange.pipe(
       map(() => {
+        let params = { ...originalParams, ...this.params$.value };
+
+        if (this.sort && this.sort.direction) {
+          params = { ...params, ...{ sort: `${this.sort.active} ${this.sort.direction}` } }
+        } else {
+          params = { ...params, ...{ sort: undefined } };
+        }
+
         if (this.paginator) {
-          return {
-            ...this.internalParams.value,
+          params = {
+            ...params,
             ...{
-              skipCount: this.paginator.pageIndex * this.paginator.pageSize,
+              skipCount: this.paginator.pageSize * this.paginator.pageIndex,
               maxResultCount: this.paginator.pageSize
             }
           }
+        } else {
+          params = {
+            ...params,
+            ...{
+              skipCount: 0,
+              maxResultCount: 1000
+            }
+          }
         }
-        return this.internalParams.value;
+
+        return params;
       })
     );
 
     if (this.dataService) {
       this.renderChangesSubscription?.unsubscribe();
-      this.renderChangesSubscription = paginatedStream
+      this.renderChangesSubscription = paramsStream
         .pipe(delay(0))
         .subscribe(params => {
           this.loading = true;
@@ -145,16 +158,6 @@ export class NgxTableDataSource<T> extends DataSource<T> {
             this.renderData.next(data.items);
           })
         })
-    }
-  }
-
-  private initPaginator() {
-    if (!this.paginator) {
-      return;
-    }
-    if (this.paginator.pageIndex > 0) {
-      this.paginator.pageIndex = 0;
-      this.internalPageChanges.next();
     }
   }
 

@@ -1,19 +1,5 @@
-<form [formGroup]="textForm">
-  <div fxLayout="column" fxLayoutGap="5px" [style.padding]="'10px 0'">
-    <mat-form-field appearance="outline">
-      <mat-label>Password</mat-label>
-      <input matInput formControlName="password" required/>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>ConfirmPassword</mat-label>
-      <input matInput formControlName="passwordRepeat" [errorStateMatcher]="errorMatcher"/>
-    </mat-form-field>
-  </div>
-</form>
+<ngx-icon fontIcon="arrow-right" size="40" [@rotate]="open ? 'open' : 'closed'"></ngx-icon>
 
-<mat-paginator
-  [length]="100"
-  [pageSize]="15"
-  [pageSizeOptions]="[15, 20, 25]" 
-  showFirstLastButtons>
-</mat-paginator>
+<button mat-button (click)="open = !open">
+  {{open ? 'closed' : 'open'}}
+</button>
