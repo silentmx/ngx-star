@@ -19,6 +19,11 @@ export class NgxLoadingDirective {
       const spinerFactory = this.componentFactoryResolver.resolveComponentFactory(MatSpinner);
       const spinner = this.viewContainerRef.createComponent(spinerFactory).instance;
       spinner.diameter = 20;
+      if (this.elementRef.nativeElement.attributes.color?.value == "primary") {
+        spinner.color = "accent";
+      } else {
+        spinner.color = "primary";
+      }
       const spinnerElement = spinner._elementRef.nativeElement;
       this.renderer.setStyle(spinnerElement, "margin-right", "5px");
 

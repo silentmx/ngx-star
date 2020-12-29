@@ -1,0 +1,30 @@
+.ngx-toggle {
+  position: relative;
+  display: inline-block;
+  .ngx-toggle-track{
+    box-sizing: border-box;
+    width: 42px;
+    height: 24px;
+    border-radius: 24px;
+    border: 3px solid #271052;
+    background-color: #271052;
+
+    &.active {
+      border: 3px solid #6e40c9;
+    }
+  }
+
+  .ngx-toggle-thumb{
+    box-sizing: border-box;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #6e40c9;
+    position: absolute;
+    top: -2px;
+    display: flex;
+    place-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+}

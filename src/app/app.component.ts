@@ -9,6 +9,7 @@ import { NgxLocaleService } from '@silentmx/ngx-star/locale';
 export class AppComponent {
   date = new Date();
   localeId: string = "zh-Hans";
+  active: boolean = false;
 
   constructor(
     public ngxLocaleService: NgxLocaleService,

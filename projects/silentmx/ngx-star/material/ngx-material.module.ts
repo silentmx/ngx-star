@@ -44,6 +44,7 @@ import { NgxIconConfig } from './icon/ngx-icon.config';
 import { NgxIconDirective } from './icon/ngx-icon.directive';
 import { NgxMaterialConfig } from './ngx-material.config';
 import { NgxPaginatorIntl } from './table/ngx-paginator-intl';
+import { NgxToggleComponent } from './toggle/ngx-toggle.component';
 
 export const NGX_FORROOT_GUARD = new InjectionToken<void>("NGX_FORROOT_GUARD");
 
@@ -83,7 +84,8 @@ export const ngxComponents = [
   NgxAvatarComponent,
   NgxLoadingDirective,
   NgxIconDirective,
-  NgxErrorMessageDirective
+  NgxErrorMessageDirective,
+  NgxToggleComponent
 ];
 
 /**

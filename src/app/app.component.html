@@ -1,34 +1,6 @@
-<div>
-  {{date | date: "full"}}
-</div>
-
-<div>
-  {{"'{0}' and '{1}' do not match." | ngxI18n: ["ok", "error"]}}
-</div>
-
-{{localeId}}
-<button mat-button  [matMenuTriggerFor]="menu">
-  <span class="mat-hint">{{ngxLocaleService.currentLanguage?.name}}</span>
-  <mat-icon fontIcon="language"></mat-icon>
-</button>
-
-<mat-menu #menu="matMenu" xPosition="before" class="admin-dark-theme mat-app-background">
-  <button mat-menu-item 
-    (click)="ngxLocaleService.updateLocale(language.locale_id)" 
-    *ngFor="let language of ngxLocaleService.languages">
-    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
-      <span class="mat-hint">{{language.name}}</span>
-      <mat-icon fontIcon="check" *ngIf="language.isSelect"></mat-icon>
-    </div>
-  </button>
-</mat-menu>
-
-<mat-paginator
-  [length]="100"
-  [pageSize]="15"
-  [pageSizeOptions]="[15, 20, 25]" 
-  showFirstLastButtons>
-</mat-paginator>
-
-
+<button mat-raised-button [ngxLoading]="true" >button</button>
 <router-outlet></router-outlet>
+
+<ngx-toggle [(ngModel)]="active"></ngx-toggle>
+
+{{active}}
