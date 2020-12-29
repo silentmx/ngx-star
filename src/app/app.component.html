@@ -9,7 +9,7 @@
 {{localeId}}
 <button mat-button  [matMenuTriggerFor]="menu">
   <span class="mat-hint">{{ngxLocaleService.currentLanguage?.name}}</span>
-  <ngx-icon fontIcon="language"></ngx-icon>
+  <mat-icon fontIcon="language"></mat-icon>
 </button>
 
 <mat-menu #menu="matMenu" xPosition="before" class="admin-dark-theme mat-app-background">
@@ -18,7 +18,7 @@
     *ngFor="let language of ngxLocaleService.languages">
     <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
       <span class="mat-hint">{{language.name}}</span>
-      <ngx-icon fontIcon="check" *ngIf="language.isSelect"></ngx-icon>
+      <mat-icon fontIcon="check" *ngIf="language.isSelect"></mat-icon>
     </div>
   </button>
 </mat-menu>

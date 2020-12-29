@@ -38,8 +38,10 @@ import { NgxLocaleModule, NGX_LOCALE_ID } from '@silentmx/ngx-star/locale';
 import { BehaviorSubject } from 'rxjs';
 import { NgxAlertDialog } from './alert/ngx-alert.dialog';
 import { NgxAvatarComponent } from './avatar/ngx-avatar.component';
-import { NgxIconComponent } from './icon/ngx-icon.component';
+import { NgxLoadingDirective } from './button/ngx-loading.directive';
+import { NgxErrorMessageDirective } from './form-field/ngx-error-message.directive';
 import { NgxIconConfig } from './icon/ngx-icon.config';
+import { NgxIconDirective } from './icon/ngx-icon.directive';
 import { NgxMaterialConfig } from './ngx-material.config';
 import { NgxPaginatorIntl } from './table/ngx-paginator-intl';
 
@@ -77,9 +79,11 @@ export const matModules = [
 
 // 自定义组件
 export const ngxComponents = [
-  NgxIconComponent,
   NgxAlertDialog,
-  NgxAvatarComponent
+  NgxAvatarComponent,
+  NgxLoadingDirective,
+  NgxIconDirective,
+  NgxErrorMessageDirective
 ];
 
 /**

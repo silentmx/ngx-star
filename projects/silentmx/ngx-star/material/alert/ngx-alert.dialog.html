@@ -1,9 +1,9 @@
 <div mat-dialog-content fxLayout="column" fxLayoutAlign="center center">
-  <ngx-icon 
+  <mat-icon 
     [fontIcon]="data.icon ? data.icon : 'warning'" 
     [size]="100" 
     [color]="data.iconColor ? data.iconColor : '#ff9800'">
-  </ngx-icon>
+  </mat-icon>
   <span class="mat-headline">{{"AreYouSure" | ngxI18n}}</span>
   <mat-hint *ngIf="data.message">{{data.message | ngxI18n: data.args}}</mat-hint>
 </div>
