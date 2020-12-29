@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, forwardRef, OnInit } from '@angular/core';
+import { Component, forwardRef, OnDestroy } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: "ngx-toggle",
@@ -46,20 +47,22 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     ])
   ]
 })
-export class NgxToggleComponent implements ControlValueAccessor, OnInit {
+export class NgxToggleComponent implements ControlValueAccessor, OnDestroy {
+  change: Subject<boolean> = new Subject<boolean>();
   isActive: boolean = false;
 
   onChange: any = () => { };
   onTouch: any = () => { };
 
-  ngOnInit() {
-
+  ngOnDestroy() {
+    this.change.complete();
   }
 
   changeState() {
     this.isActive = !this.isActive;
     this.onChange(this.isActive);
     this.onTouch(this.isActive);
+    this.change.next(this.isActive);
   }
 
   writeValue(active: boolean | undefined | null): void {
