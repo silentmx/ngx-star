@@ -1,6 +1,14 @@
-<button mat-raised-button [ngxLoading]="true" >button</button>
-<router-outlet></router-outlet>
+<button mat-raised-button [ngxLoading]="loading" (click)="loading = !loading" >button</button>
+<button mat-icon-button [ngxLoading]="loading" (click)="loading = !loading" color="primary">
+  <mat-icon fontIcon="setting-fill"></mat-icon>
+</button>
+<button mat-fab [ngxLoading]="loading" color="primary">
+  <mat-icon fontIcon="delete"></mat-icon>
+</button>
+<button mat-mini-fab color="accent" [ngxLoading]="loading">
+  <mat-icon fontIcon="delete"></mat-icon>
+</button>
 
+<button mat-button (click)="loading = !loading">Reset</button>
 <ngx-toggle [(ngModel)]="active"></ngx-toggle>
-
-{{active}}
+<router-outlet></router-outlet>
