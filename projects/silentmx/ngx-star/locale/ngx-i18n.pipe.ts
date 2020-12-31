@@ -23,6 +23,10 @@ export class NgxI18nPipe implements PipeTransform, OnDestroy {
   }
 
   transform(key: string, args: string[] = []): string {
+    if (!key) {
+      return "";
+    }
+
     let value = NgxI18nPipe.dataSource.get(key);
     if (value) {
       let argSet = new Set<String>(value.match(/\{[0-9]*\}/g));

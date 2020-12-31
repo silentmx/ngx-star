@@ -27,7 +27,7 @@ export interface SearchConfig {
  * @author silentmx
  */
 export class NgxTableDataSource<T> extends DataSource<T> {
-  public loading: boolean = false;
+  public loading: boolean = true;
   public params$ = new BehaviorSubject<{}>({});
   public errorMsg: string = "";
   public deleteId: string | number = ""; // 用来标记正在被删除的数据

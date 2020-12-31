@@ -51,7 +51,7 @@ export class NgxErrorMessageDirective implements AfterViewInit {
         }
   
         if (firstError === "email") {
-          this.errorMsg = "EmailFormatErrorMessage";
+          this.errorMsg = "The field {0} is invalid.";
           return;
         }
   
