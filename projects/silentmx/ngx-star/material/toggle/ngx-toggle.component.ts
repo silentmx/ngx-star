@@ -7,7 +7,11 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   templateUrl: "./ngx-toggle.component.html",
   styleUrls: ["./ngx-toggle.component.scss"],
   host: {
-    "style": "display: inherit;"
+    "style": `
+      display: inline-block;
+      box-sizing: border-box;
+      height: 24px;
+    `,
   },
   providers: [
     {
