@@ -6,6 +6,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   selector: "ngx-toggle",
   templateUrl: "./ngx-toggle.component.html",
   styleUrls: ["./ngx-toggle.component.scss"],
+  host: {
+    "style": "display: inherit;"
+  },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

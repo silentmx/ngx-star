@@ -4,7 +4,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: "ngx-avatar",
   templateUrl: "./ngx-avatar.component.html",
-  styleUrls: ["./ngx-avatar.component.scss"]
+  styleUrls: ["./ngx-avatar.component.scss"],
+  host: {
+    "style": "display: inherit;"
+  }
 })
 export class NgxAvatarComponent {
   @Input("src") src: string;

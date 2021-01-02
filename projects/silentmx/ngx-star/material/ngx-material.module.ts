@@ -150,6 +150,7 @@ export class NgxMaterialModule {
 
       // 配置material组件语言环境
       this.ngxLocaleId$.subscribe(locale => {
+        console.log(locale);
         this.dateAdapter.setLocale(locale);
       })
     }

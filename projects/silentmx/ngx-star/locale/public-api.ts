@@ -5,4 +5,3 @@
 export * from './ngx-i18n.pipe';
 export * from './ngx-locale-config';
 export * from './ngx-locale.module';
-export * from './ngx-locale.service';
