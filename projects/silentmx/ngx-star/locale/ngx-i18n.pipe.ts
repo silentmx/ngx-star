@@ -23,7 +23,9 @@ export class NgxI18nPipe implements PipeTransform, OnDestroy {
   }
 
   transform(key: string, args: string[] = []): string {
-    if (!key) {
+    console.log(key);
+    console.log(typeof key);
+    if (!key || typeof key != "string") {
       return "";
     }
 
@@ -43,6 +45,7 @@ export class NgxI18nPipe implements PipeTransform, OnDestroy {
       }
       return value;
     } else {
+      console.log(key);
       let argSet = new Set<String>(key.match(/\{[0-9]*\}/g));
       if (argSet.size > 0 && args.length > 0) {
         let argMap = new Map(Array.from(argSet).map((item, index) => {

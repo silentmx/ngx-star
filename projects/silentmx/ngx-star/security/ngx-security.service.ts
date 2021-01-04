@@ -7,7 +7,7 @@ export class NgxSecurityService {
   private static dataSource$: BehaviorSubject<Map<string, boolean>>
     = new BehaviorSubject<Map<string, boolean>>(new Map<string, boolean>());
 
-  private get dataSource() {
+  get dataSource() {
     return NgxSecurityService.dataSource$.asObservable();
   }
 
