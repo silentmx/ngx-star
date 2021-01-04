@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 })
 export class NgxI18nPipe implements PipeTransform, OnDestroy {
   private readonly onUpdate: Subject<void> = new Subject<void>();
-  private static dataSource: Map<string, string> = new Map(); 
+  private static dataSource: Map<string, string> = new Map<string, string>(); 
 
   updateDataSource(data: { [key: string]: string }) {
     NgxI18nPipe.dataSource = new Map(Object.entries(data));

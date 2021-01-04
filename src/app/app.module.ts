@@ -1,13 +1,21 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxLocaleModule, NGX_LOCALE_ID } from '@silentmx/ngx-star/locale';
 import { NgxMaterialModule } from '@silentmx/ngx-star/material';
+import { NgxSecurityModule } from '@silentmx/ngx-star/security';
 import { NgxToastModule } from '@silentmx/ngx-star/toast';
 import { BehaviorSubject } from 'rxjs';
+import { AppConfigService } from './app-config.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
+// app初始化工厂
+const appInitFacory = (appConfigService: AppConfigService) => {
+  return () => appConfigService.init();
+}
+
 @NgModule({
   declarations: [
     AppComponent
@@ -18,6 +26,7 @@ import { AppComponent } from './app.component';
     HttpClientModule,
     NgxToastModule,
     NgxLocaleModule,
+    NgxSecurityModule,
     NgxMaterialModule.forRoot({
       iconConfg: {
         fontIcon: {
@@ -35,6 +44,14 @@ import { AppComponent } from './app.component';
   ],
   providers: [
     { provide: NGX_LOCALE_ID, useValue: new BehaviorSubject<string>("zh-Hans") },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitFacory,
+      multi: true,
+      deps: [
+        AppConfigService,
+      ]
+    },
   ],
   bootstrap: [AppComponent]
 })
