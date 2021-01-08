@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AppConfigService } from './app-config.service';
 
 @Component({
   selector: 'app-root',
@@ -7,14 +6,5 @@ import { AppConfigService } from './app-config.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  active: boolean = false;
-  loading: boolean = false;
-
-  constructor(private appConfigService: AppConfigService) {
-
-  }
-
-  changeConditions() {
-    this.appConfigService.updateConfig();
-  }
+  
 }

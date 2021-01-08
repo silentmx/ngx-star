@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import {
   Inject,
   InjectionToken,
@@ -34,7 +35,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NgxLocaleModule, NGX_LOCALE_ID } from '@silentmx/ngx-star/locale';
+import { NgxCommonModule } from '@silentmx/ngx-star/common';
+import { NGX_LOCALE_ID } from '@silentmx/ngx-star/core';
 import { BehaviorSubject } from 'rxjs';
 import { NgxAlertDialog } from './alert/ngx-alert.dialog';
 import { NgxAvatarComponent } from './avatar/ngx-avatar.component';
@@ -76,6 +78,7 @@ export const matModules = [
   MatSnackBarModule,
   MatChipsModule,
   MatExpansionModule,
+  DragDropModule
 ];
 
 // 自定义组件
@@ -94,7 +97,7 @@ export const ngxComponents = [
  */
 @NgModule({
   imports: [
-    NgxLocaleModule,
+    NgxCommonModule,
     FlexLayoutModule,
     matModules,
   ],

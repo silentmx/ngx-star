@@ -1,5 +1,8 @@
-import { Injectable } from '@angular/core';
-import { NgxSecurityService } from '@silentmx/ngx-star/security';
+import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
+import { NgxI18nService } from '@silentmx/ngx-star/common';
+import { NGX_LOCALE_ID } from '@silentmx/ngx-star/core';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * App 全局配置服务，以及订阅数据提供者
@@ -11,7 +14,9 @@ import { NgxSecurityService } from '@silentmx/ngx-star/security';
 export class AppConfigService {
 
   constructor(
-    private ngxSecurityService: NgxSecurityService
+    private ngxI18nService: NgxI18nService,
+    private httpClient: HttpClient,
+    @Inject(NGX_LOCALE_ID) private ngxLocaleId$: BehaviorSubject<string>,
   ) {
 
   }
@@ -21,32 +26,23 @@ export class AppConfigService {
    */
   init(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      let conditions = {
-        "AbpAccount.SettingManagement": true,
-        "AbpIdentity.ClaimTypes": true,
-        "AbpIdentity.ClaimTypes.Create": true,
-        "AbpIdentity.ClaimTypes.Delete": true,
-        "AbpIdentity.ClaimTypes.Update": true,
-        "AbpIdentity.OrganizationUnits": true,
-        "AbpIdentity.OrganizationUnits.ManageMembers": true,
-        "AbpIdentity.OrganizationUnits.ManageOU": true,
-        "AbpIdentity.OrganizationUnits.ManageRoles": true
-      }
-      this.ngxSecurityService.updateDataSource(conditions);
-      resolve(true);
+      this.httpClient.get(`/assets/locale/${this.ngxLocaleId$.value}.json`)
+        .subscribe(data => {
+          this.setNgxI18nData(data, this.ngxLocaleId$.value);
+        resolve(true);
+      });
     });
   }
 
-  updateConfig() {
-    let conditions = {
-      "AbpIdentity.Roles": true,
-      "AbpIdentity.Roles.Create": true,
-      "AbpIdentity.Roles.Delete": true,
-      "AbpIdentity.Roles.ManagePermissions": true,
-      "AbpIdentity.Roles.Update": true,
-      "AbpIdentity.SettingManagement": true
-    }
-    this.ngxSecurityService.updateDataSource(conditions);
+  updateLanguage(locale: string) {
+    this.httpClient.get(`/assets/locale/${locale}.json`)
+      .subscribe(data => {
+        this.setNgxI18nData(data, locale)
+      });
+  }
+
+  private setNgxI18nData(data: {} = {}, locale: string = "zh-Hans") {
+    this.ngxI18nService.updateDataSource(data, locale);
   }
 
 }
