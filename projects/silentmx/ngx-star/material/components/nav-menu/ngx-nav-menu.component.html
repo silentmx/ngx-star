@@ -1,0 +1,52 @@
+
+<div class="ngx-menu-container" fxLayout="column">
+  <div class="ngx-menu-header" fxLayout="row" fxLayoutAlign="end center">
+    <div fxFlex>
+      <ng-content></ng-content>
+    </div>
+    <button mat-icon-button class="menu-toggle">
+      <mat-icon fontSet="material-icons" size="24">menu_open</mat-icon>
+    </button>
+  </div>
+
+  <div class="ngx-menu-body" fxLayout="column" fxFlex>
+    <!-- expand tree -->
+    <mat-nav-list [style.paddingTop.px]="0" fxFlex>
+      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+        <!-- This is the tree node template for leaf nodes -->
+        <mat-tree-node *matTreeNodeDef="let node">
+          <mat-list-item [routerLink]="node.url" [routerLinkActive]="'ngx-menu-active'">
+            <div matLine [style.paddingLeft.px]="node.level * 25" fxLayoutAlign="start center" fxLayoutGap="5px">
+              <mat-icon [fontIcon]="node.icon" *ngIf="node.icon"></mat-icon>
+              <span fxFlex>{{node.name | ngxI18n}}</span>
+            </div>
+          </mat-list-item>
+        </mat-tree-node>
+    
+        <!-- This is the tree node template for expandable nodes -->
+        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+          <mat-list-item matTreeNodeToggle [class.ngx-menu-active]="router.isActive(node.url, false)">
+            <div matLine [style.paddingLeft.px]="node.level * 24" fxLayoutAlign="start center" fxLayoutGap="5px">
+              <mat-icon [fontIcon]="node.icon" *ngIf="node.icon"></mat-icon>
+              <span fxFlex>{{node.name | ngxI18n}}</span>
+              <mat-icon
+                size="24"
+                fontSet="material-icons" 
+                [@rotate]="treeControl.isExpanded(node) ? 'open' : 'closed'">
+                chevron_right
+              </mat-icon>
+            </div>
+          </mat-list-item>
+          <div @collapse *ngIf="treeControl.isExpanded(node)">
+            <ng-container matTreeNodeOutlet></ng-container>
+          </div>
+        </mat-nested-tree-node>
+      </mat-tree>
+    </mat-nav-list>
+  
+    <!-- copy right -->
+    <div class="copy-right" *ngIf="copyRight" [matTooltip]="copyRight">
+      {{copyRight}}&copy;{{nowDate | date: "yyyy"}}
+    </div>
+  </div>
+</div>

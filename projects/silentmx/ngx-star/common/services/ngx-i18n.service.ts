@@ -1,15 +1,26 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Optional, SkipSelf } from '@angular/core';
 import { NGX_LOCALE_ID } from '@silentmx/ngx-star/core';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class NgxI18nService {
   private static dataSource: Map<string, string> = new Map<string, string>();
 
   constructor(
-    @Inject(NGX_LOCALE_ID) private ngxLocaleId$: BehaviorSubject<string>
+    @Inject(NGX_LOCALE_ID) private ngxLocaleId$: BehaviorSubject<string>,
+    @Optional() @SkipSelf() private parentService?: NgxI18nService,
   ) {
-
+    if (parentService) {
+      throw Error(
+        `[NgxI18nService]: trying to create multiple instances,but this service should be a singleton.`
+      );
+    } else {
+      this.ngxLocaleId$.subscribe(localeId => {
+        localStorage.setItem("ngx_locale_id", localeId);
+      });
+    }
   }
 
   updateDataSource(data: { [key: string]: string }, localeId?: string): void {

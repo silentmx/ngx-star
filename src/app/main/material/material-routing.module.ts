@@ -9,7 +9,7 @@ const routes: Routes = [
     data: {
       ngxMenu: {
         name: "Material",
-        icon: "Material",
+        icon: "icon-features",
       }
     },
     children: [
@@ -18,9 +18,8 @@ const routes: Routes = [
         data: {
           ngxMenu: {
             name: "button",
-            icon: "button"
+            icon: "icon-share"
           },
-          security: ["button"]
         },
         component: ButtonComponent
       }

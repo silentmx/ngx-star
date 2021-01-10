@@ -1,20 +1,18 @@
 import { NgModule } from '@angular/core';
 import { NgxCommonModule } from '@silentmx/ngx-star/common';
-import { LocaleComponent } from './locale/locale.component';
+import { NgxMaterialModule } from '@silentmx/ngx-star/material';
 import { MainRoutingModule } from './main-routing.module';
 import { MainComponent } from './main.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
 
 @NgModule({
   imports: [
     NgxCommonModule,
+    NgxMaterialModule.forRoot(),
     MainRoutingModule,
   ],
   declarations: [
     MainComponent,
-    NavMenuComponent,
-    LocaleComponent
-  ]
+  ],
 })
 export class MainModule {
 

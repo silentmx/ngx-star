@@ -29,7 +29,7 @@ export class AppConfigService {
       this.httpClient.get(`/assets/locale/${this.ngxLocaleId$.value}.json`)
         .subscribe(data => {
           this.setNgxI18nData(data, this.ngxLocaleId$.value);
-        resolve(true);
+          resolve(true);
       });
     });
   }

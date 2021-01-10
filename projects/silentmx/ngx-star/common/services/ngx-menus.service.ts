@@ -1,4 +1,4 @@
-import { Injectable, Injector, OnDestroy } from '@angular/core';
+import { Injectable, Injector, OnDestroy, Optional, SkipSelf } from '@angular/core';
 import { Router, Routes } from '@angular/router';
 import { BehaviorSubject, combineLatest, of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -30,7 +30,9 @@ export class NgxMenu {
  * 自动从路由配置获取导航菜单服务
  * @author silentmx
  */
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class NgxMenusService implements OnDestroy {
   // 存放从路由配置获取的导航菜单
   ngxMenus$: BehaviorSubject<NgxMenu[]> = new BehaviorSubject<NgxMenu[]>([]);
@@ -43,10 +45,17 @@ export class NgxMenusService implements OnDestroy {
   constructor(
     private router: Router,
     private injector: Injector,
-    private ngxSecurityService: NgxSecurityService
+    private ngxSecurityService: NgxSecurityService,
+    @Optional() @SkipSelf() private parentService?: NgxMenusService,
   ) {
-    this.collectNgxMenuData();
-    this.genNgxMenuTree();
+    if (parentService) {
+      throw Error(
+        `[NgxMenusService]: trying to create multiple instances,but this service should be a singleton.`
+      );
+    } else {
+      this.collectNgxMenuData();
+      this.genNgxMenuTree();
+    }
   }
 
   ngOnDestroy() {

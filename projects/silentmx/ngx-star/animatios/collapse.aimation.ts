@@ -14,12 +14,12 @@ export function collapseAnimation(config?: CollapseConfig): AnimationTriggerMeta
     config = { ...new CollapseConfig, ...config };
     return trigger("collapse", [
       transition(":enter", [
-        style({ opacity: 0, height: 0, overflow: "hidden" }),
-        animate(`${config.time}ms ease-in`, style({ opacity: 1, height: "*" })),
+        style({ height: 0, overflow: "hidden" }),
+        animate(`${config.time}ms ease-in`, style({ height: "*" })),
       ]),
       transition(":leave", [
-        style({ opacity: 1, height: "*", overflow: "hidden" }),
-        animate(`${config.time}ms ease-out`, style({ opacity: 0.5, height: 0 })),
+        style({ height: "*", overflow: "hidden" }),
+        animate(`${config.time}ms ease-out`, style({ height: 0 })),
       ])
     ])
   })(config);

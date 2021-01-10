@@ -1,4 +1,11 @@
-<div>
-  <nav-menu></nav-menu>
-  <router-outlet></router-outlet>
-</div>
+<mat-sidenav-container fxFlexFill autosize>
+  <mat-sidenav mode="side" [opened]="true">
+    <ngx-nav-menu [copyRight]="'云南大昭技术有限责任公司'">
+      <mat-icon svgIcon="logo" size="64"></mat-icon>
+    </ngx-nav-menu>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-icon svgIcon="logo"></mat-icon>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
