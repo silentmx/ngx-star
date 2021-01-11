@@ -1,6 +1,9 @@
 {
   "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../../dist/silentmx/ngx-star",
+  "assets": [
+    "./material/ngx-material-theme.scss"
+  ],
   "lib": {
     "entryFile": "index.ts"
   }

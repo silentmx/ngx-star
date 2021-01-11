@@ -1,5 +1,5 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { Router } from '@angular/router';
 import { collapseAnimation, rotateAnimation } from '@silentmx/ngx-star/animatios';
@@ -11,16 +11,17 @@ import { NgxMenu, NgxMenusService } from '@silentmx/ngx-star/common';
   styleUrls: ["./ngx-nav-menu.component.scss"],
   animations: [
     rotateAnimation(),
+    rotateAnimation({
+      rotate: "180"
+    }),
     collapseAnimation(),
   ]
 })
 export class NgxNavMenuComponent implements OnInit {
+  // 菜单状态
+  expand: boolean = localStorage.getItem("ngx-menu-expand") ?
+    localStorage.getItem("ngx-menu-expand") == "true" : false;
   nowDate: Date = new Date();
-  @HostBinding("style.--bg-color")
-  @Input("bgColor") bgColor: string = "#7b1fa2";
-
-  @HostBinding("style.--active-color")
-  @Input("activeColor") activeColor: string = "#ffc107";
 
   @Input("copyRight") copyRight: string;
 
@@ -48,5 +49,11 @@ export class NgxNavMenuComponent implements OnInit {
       return false;
     }
   };
+
+  // 菜单状态切换
+  toggle() {
+    this.expand = !this.expand;
+    localStorage.setItem("ngx-menu-expand", `${this.expand}`);
+  }
 
 }

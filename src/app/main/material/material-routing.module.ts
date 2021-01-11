@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ButtonComponent } from './button/button.component';
+import { DialogComponent } from './dialog/dialog.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/main/material/button", pathMatch: "full" },
@@ -22,6 +23,15 @@ const routes: Routes = [
           },
         },
         component: ButtonComponent
+      }, {
+        path: "dialog",
+        data: {
+          ngxMenu: {
+            name: "dialog",
+            icon: "icon-info"
+          }
+        },
+        component: DialogComponent
       }
     ]
   }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './main.component';
+import { ToastComponent } from './toast/toast.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/main/common/security", pathMatch: "full" },
@@ -8,6 +9,16 @@ const routes: Routes = [
     path: "",
     component: MainComponent,
     children: [
+      {
+        path: "toast",
+        data: {
+          ngxMenu: {
+            name: "toast",
+            icon: "icon-info"
+          }
+        },
+        component: ToastComponent
+      },
       {
         path: "common",
         loadChildren: () => import("./comm/comm.module").then((m) => m.CommModule),

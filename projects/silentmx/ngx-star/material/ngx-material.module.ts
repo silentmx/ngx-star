@@ -1,5 +1,6 @@
 import { Inject, ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 import { RouterModule } from '@angular/router';
 import { NgxCommonModule } from '@silentmx/ngx-star/common';
 import { NGX_FORROOT_GUARD, NGX_LOCALE_ID } from '@silentmx/ngx-star/core';
@@ -8,6 +9,7 @@ import { NGX_MATERIAL_COMPONENTS } from './components/index';
 import { NGX_MATERIAL_DIRECTIVES } from './directives/index';
 import { MAT_MODULES } from './mat-modules';
 import { NgxMaterialService } from './ngx-material.service';
+import { NgxPaginatorIntl } from './ngx-paginator-intl';
 
 /**
  * Ngx Anagular material module
@@ -27,6 +29,9 @@ import { NgxMaterialService } from './ngx-material.service';
   declarations: [
     NGX_MATERIAL_COMPONENTS,
     NGX_MATERIAL_DIRECTIVES
+  ],
+  providers: [
+    { provide: MatPaginatorIntl, useClass: NgxPaginatorIntl }
   ]
 })
 export class NgxMaterialModule {

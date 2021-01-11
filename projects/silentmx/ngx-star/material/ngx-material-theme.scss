@@ -1,0 +1,9 @@
+$ngx-nav-bg-color: #7b1fa2 !default;
+$ngx-nav-bg-end: #6e40c9 !default;
+$ngx-nav-active-color: #ffc107 !default;
+
+.ngx-menu-active{
+  * {
+    color: $ngx-nav-active-color;
+  }
+}

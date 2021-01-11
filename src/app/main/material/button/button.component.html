@@ -1,0 +1,29 @@
+<div>
+  <button mat-button [ngxLoading]="loading">default button</button>
+  <button mat-icon-button [ngxLoading]="loading">
+    <mat-icon fontIcon="icon-setting-fill"></mat-icon>
+  </button>
+  <button mat-raised-button [ngxLoading]="loading">
+    raised button
+  </button>
+  <button mat-flat-button [ngxLoading]="loading">
+    flat button
+  </button>
+  <button mat-raised-button [ngxLoading]="loading">
+    raised button
+  </button>
+  <button mat-stroked-button [ngxLoading]="loading">
+    mat stroked button
+  </button>
+  <button mat-fab [ngxLoading]="loading">
+    <mat-icon fontIcon="icon-setting-fill"></mat-icon>
+  </button>
+  <button mat-mini-fab [ngxLoading]="loading">
+    <mat-icon fontIcon="icon-setting-fill"></mat-icon>
+  </button>
+</div>
+
+
+<button (click)="loading = !loading" mat-stroked-button>
+  Change Loading state
+</button>

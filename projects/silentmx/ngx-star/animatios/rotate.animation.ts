@@ -2,8 +2,6 @@ import { animate, AnimationTriggerMetadata, state, style, transition, trigger } 
 
 class RotateConfig {
   time?: string | number = "200";
-  startState?: string = "closed";
-  endState?: string = "open";
   rotate?: string | number = "90";
 }
 
@@ -14,20 +12,20 @@ class RotateConfig {
 export function rotateAnimation(config?: RotateConfig): AnimationTriggerMetadata {
   return ((config?: RotateConfig): AnimationTriggerMetadata => {
     config = { ...new RotateConfig(), ...config };
-    return trigger("rotate", [
+    return trigger(`rotate${config.rotate}`, [
       state(
-        `${config.startState}`,
+        "start",
         style({
           transform: `rotate(0deg)`,
         })
       ),
       state(
-        `${config.endState}`,
+        "end",
         style({
           transform: `rotate(${config.rotate}deg)`,
         })
       ),
-      transition(`${config.startState} => ${config.endState}`, [
+      transition(`start => end`, [
         animate(
           `${config.time}ms ease-out`,
           style({
@@ -35,7 +33,7 @@ export function rotateAnimation(config?: RotateConfig): AnimationTriggerMetadata
           })
         )
       ]),
-      transition(`${config.endState} => ${config.startState}`, [
+      transition(`end => start`, [
         animate(
           `${config.time}ms ease-out`,
           style({

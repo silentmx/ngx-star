@@ -26,7 +26,7 @@ export class NgxMaterialService {
     const link = document.createElement("link");
     link.id = "MaterialIcon";
     link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/icon?family=Material+Icons";
+    link.href = "https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Sharp|Material+Icons+Round|Material+Icons+Two+Tone";
     head.appendChild(link);
 
     // 修改图标库默认fontset, 默认值material-icon

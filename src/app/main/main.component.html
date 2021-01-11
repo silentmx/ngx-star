@@ -5,7 +5,8 @@
     </ngx-nav-menu>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-icon svgIcon="logo"></mat-icon>
-    <router-outlet></router-outlet>
+    <div [style.padding.px]="16">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

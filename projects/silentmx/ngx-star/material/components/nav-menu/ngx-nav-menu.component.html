@@ -1,17 +1,20 @@
 
-<div class="ngx-menu-container" fxLayout="column">
+<div class="ngx-menu-container" fxLayout="column" [class.collapse]="!expand">
   <div class="ngx-menu-header" fxLayout="row" fxLayoutAlign="end center">
-    <div fxFlex>
+    <div fxFlex *ngIf="expand">
       <ng-content></ng-content>
     </div>
-    <button mat-icon-button class="menu-toggle">
-      <mat-icon fontSet="material-icons" size="24">menu_open</mat-icon>
+    <button mat-icon-button class="menu-toggle" (click)="toggle()">
+      <mat-icon fontSet="material-icons" size="24"
+        [@rotate180]="expand ? 'start' : 'end'">
+        menu_open
+      </mat-icon>
     </button>
   </div>
 
   <div class="ngx-menu-body" fxLayout="column" fxFlex>
     <!-- expand tree -->
-    <mat-nav-list [style.paddingTop.px]="0" fxFlex>
+    <mat-nav-list [style.paddingTop.px]="0" fxFlex *ngIf="expand">
       <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
         <!-- This is the tree node template for leaf nodes -->
         <mat-tree-node *matTreeNodeDef="let node">
@@ -32,7 +35,7 @@
               <mat-icon
                 size="24"
                 fontSet="material-icons" 
-                [@rotate]="treeControl.isExpanded(node) ? 'open' : 'closed'">
+                [@rotate90]="treeControl.isExpanded(node) ? 'end' : 'start'">
                 chevron_right
               </mat-icon>
             </div>
@@ -44,9 +47,76 @@
       </mat-tree>
     </mat-nav-list>
   
+    <!-- collapse menu -->
+    <div *ngIf="!expand" fxLayout="column" fxLayoutAlign="start center" fxFlex>
+      <ng-container *ngFor="let node of dataSource.data">
+        <button mat-icon-button 
+          *ngIf="node.children && node.children.length > 0; else linkButton"
+          [matTooltip]="node.name | ngxI18n"
+          [matMenuTriggerFor]="appMenu"
+          [matMenuTriggerData]="{menus: node.children}"
+          [class.ngx-menu-active]="router.isActive(node.url, false)">
+          <mat-icon [fontIcon]="node.icon"></mat-icon>
+        </button>
+        <ng-template #linkButton>
+          <button mat-icon-button [routerLink]="node.url"
+            [class.ngx-menu-active]="router.isActive(node.url, false)"
+            [matTooltip]="node.name | ngxI18n">
+            <mat-icon [fontIcon]="node.icon"></mat-icon>
+          </button>
+        </ng-template>
+      </ng-container>
+  
+      <mat-menu #appMenu="matMenu">
+        <ng-template matMenuContent let-menus="menus">
+          <ng-container *ngFor="let menu of menus">
+            <button mat-menu-item  
+              *ngIf="menu.children && menu.children.length > 0; else linkMenu"
+              [matMenuTriggerFor]="appSubMenu"
+              [class.ngx-menu-active]="router.isActive(menu.url, false)"
+              [matMenuTriggerData]="{menus: menu.children}">
+              <mat-icon [fontIcon]="menu.icon" *ngIf="menu.icon"></mat-icon>
+              <span>{{menu.name | ngxI18n}}</span>
+            </button>
+            <ng-template #linkMenu>
+              <button mat-menu-item
+                [routerLink]="menu.url"
+                [class.ngx-menu-active]="router.isActive(menu.url, false)">
+                <mat-icon [fontIcon]="menu.icon" *ngIf="menu.icon"></mat-icon>
+                <span>{{menu.name | ngxI18n}}</span>
+              </button>
+            </ng-template>
+          </ng-container>
+        </ng-template>
+      </mat-menu>
+  
+      <mat-menu #appSubMenu="matMenu">
+        <ng-template matMenuContent let-menus="menus">
+          <ng-container *ngFor="let menu of menus">
+            <button mat-menu-item  
+              *ngIf="menu.children && menu.children.length > 0; else linkMenuButton" 
+              [matMenuTriggerFor]="appMenu"
+              [class.ngx-menu-active]="router.isActive(menu.url, false)"
+              [matMenuTriggerData]="{menus: menu.children}">
+              <mat-icon [fontIcon]="menu.icon" *ngIf="menu.icon"></mat-icon>
+              <span>{{menu.name | ngxI18n}}</span>
+            </button>
+            <ng-template #linkMenuButton>
+              <button mat-menu-item
+                [routerLink]="menu.url"
+                [class.ngx-menu-active]="router.isActive(menu.url, false)">
+                <mat-icon [fontIcon]="menu.icon" *ngIf="menu.icon"></mat-icon>
+                <span>{{menu.name | ngxI18n}}</span>
+              </button>
+            </ng-template>
+          </ng-container>
+        </ng-template>
+      </mat-menu>
+    </div>
+
     <!-- copy right -->
     <div class="copy-right" *ngIf="copyRight" [matTooltip]="copyRight">
-      {{copyRight}}&copy;{{nowDate | date: "yyyy"}}
+      {{ expand ? copyRight : ""}}&copy;{{nowDate | date: "yyyy"}}
     </div>
   </div>
 </div>

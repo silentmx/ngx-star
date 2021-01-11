@@ -4,5 +4,7 @@ import { Component } from '@angular/core';
   templateUrl: "./button.component.html"
 })
 export class ButtonComponent {
+  loading: boolean = true;
 
+  
 }

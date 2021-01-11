@@ -1,6 +1,6 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgModule } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxCommonModule } from '@silentmx/ngx-star/common';
 import { NgxToastBox } from './ngx-toast-box';
 import { NgxToastContainer } from './ngx-toast-container';
 import { SimpleToastComponent } from './simple-toast.component';
@@ -12,10 +12,7 @@ import { SimpleToastComponent } from './simple-toast.component';
 @NgModule({
   imports: [
     OverlayModule,
-    BrowserAnimationsModule,
-  ],
-  exports: [
-    BrowserAnimationsModule,
+    NgxCommonModule,
   ],
   declarations: [
     NgxToastContainer,
