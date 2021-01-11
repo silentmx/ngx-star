@@ -1,7 +1,7 @@
-import { Injectable, Injector, OnDestroy, Optional, SkipSelf } from '@angular/core';
-import { Router, Routes } from '@angular/router';
-import { BehaviorSubject, combineLatest, of, Subject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Injectable, Injector, Optional, SkipSelf } from '@angular/core';
+import { Route, Router, Routes } from '@angular/router';
+import { BehaviorSubject, combineLatest, forkJoin, Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { NgxSecurityService } from './ngx-security.service';
 
 /**
@@ -33,14 +33,9 @@ export class NgxMenu {
 @Injectable({
   providedIn: "root"
 })
-export class NgxMenusService implements OnDestroy {
+export class NgxMenusService {
   // 存放从路由配置获取的导航菜单
   ngxMenus$: BehaviorSubject<NgxMenu[]> = new BehaviorSubject<NgxMenu[]>([]);
-
-  // 用来存放从路由配置获取的原生菜单数据;
-  private ngxMenus: NgxMenu[] = [];
-
-  private readonly internalMenuChanges = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -53,51 +48,66 @@ export class NgxMenusService implements OnDestroy {
         `[NgxMenusService]: trying to create multiple instances,but this service should be a singleton.`
       );
     } else {
-      this.collectNgxMenuData();
       this.genNgxMenuTree();
     }
   }
 
-  ngOnDestroy() {
-    this.internalMenuChanges.complete();
-  }
-
   /**
    * 收集菜单数据
-   * @param routes
+   * @param route
    */
   private collectNgxMenuData(
-    routes: Routes = this.router.config,
-    parentPath: string = "",
-  ) {
-    routes.map(route => {
+    routes: Routes, 
+    parentPath: string = "", 
+  ): Observable<NgxMenu[]> {
+    let menuList: NgxMenu[] = [];
+    let childrenMenus$: Observable<NgxMenu[]>[] = [];
+
+    for (let route of routes) {
       let routePath = route.path ? `${parentPath}/${route.path}` : parentPath;
       if (route.data && route.data.ngxMenu && !route.redirectTo) {
-        let menu: NgxMenu = new NgxMenu({
+        menuList.push(new NgxMenu({
           ...route.data.ngxMenu,
           ...{
             url: routePath,
             security: route.data.security
           }
-        });
-
-        if (!this.findExistMenu(menu)) {
-          this.ngxMenus.push(menu);
-          this.internalMenuChanges.next();
-        }
+        }))
       }
 
       if (route.children && route.children.length > 0) {
-        this.collectNgxMenuData(route.children, routePath);
+        childrenMenus$.push(this.collectNgxMenuData(route.children, routePath));
       }
 
       if (route.loadChildren) {
-        (<any>this.router).configLoader.load(this.injector, route)
-          .subscribe((moduleConf) => {
-            this.collectNgxMenuData(moduleConf.routes, routePath);
-          });
+        childrenMenus$.push(
+          this.loadRouteConfig(route).pipe(
+            switchMap(routes => {
+              return this.collectNgxMenuData(routes, routePath);
+            })
+          )
+        );
       }
-    })
+    }
+
+    return forkJoin([
+      of(menuList),
+      ...childrenMenus$
+    ]).pipe(
+      switchMap((data) => {
+        return of([].concat.apply([], data));
+      })
+    );
+  }
+
+  /**
+   * 加载lazy路由配置
+   * @param route 
+   */
+  private loadRouteConfig(route: Route): Observable<Routes> {
+    return (<any>this.router).configLoader
+      .load(this.injector, route)
+      .pipe(map((m: any) => m.routes));
   }
 
   /**
@@ -105,59 +115,72 @@ export class NgxMenusService implements OnDestroy {
    */
   private genNgxMenuTree() {
     combineLatest([
-      this.internalMenuChanges,
+      this.collectNgxMenuData(this.router.config).pipe(
+        map(menus => {
+          // 数据根据url去重复
+          return menus.reduce((acc, item) => {
+            let isExist: boolean = false;
+            acc = acc.map(value => {
+              if (value.url == item.url) {
+                isExist = true;
+                return item;
+              } else {
+                return value;
+              }
+            });
+            if (!isExist) {
+              acc.push(item);
+            }
+            return acc;
+          }, [])
+        })
+      ),
       this.ngxSecurityService.dataSource
     ]).pipe(
-      switchMap(([_, securityMap]) => {
-        const menus: NgxMenu[] = [];
+      switchMap(([menus, securityMap]) => {
+        // 权限过滤
+        return of(menus.reduce((acc, item) => {
+          // 获取权限（包括子菜单权限）
+          let securitys: string[] = menus.reduce((accs, el) => {
+            if (el.url.includes(item.url) && el.security && el.security.length > 0) {
+              accs.push(...el.security)
+            }
+            return accs;
+          }, []);
 
-        // 根据权限获取菜单List
-        const securityMenus = this.ngxMenus.reduce((acc, el) => {
-          let securitys: string[] = this.getMenuSecurity(el);
+          // 权限判定
           if (securitys && securitys.length > 0) {
             for (let condition of securitys) {
               if (securityMap.get(condition) && securityMap.get(condition) == true) {
-                acc.push(new NgxMenu(el));
+                acc.push(item);
               }
             }
           } else {
-            acc.push(new NgxMenu(el));
+            acc.push(item);
           }
           return acc;
-        }, []);
+        }, []));
+      }),
+      // 根据url生成菜单树
+      map((menus: NgxMenu[]) => {
+        let ngxMenus: NgxMenu[] = [];
 
-        // 生成菜单结构树
-        securityMenus.forEach(el => {
-          if (!this.findParentMenu(el, securityMenus)) {
-            el.level = 0;
-            menus.push(el);
+        menus.forEach(item => {
+          let parentMenu = this.findParentMenu(item, menus);
+          if (!parentMenu) {
+            item.level = 0;
+            ngxMenus.push(item);
             return;
           }
-          const parentEl = this.findParentMenu(el, securityMenus);
-          el.level = parentEl.level + 1;
-          parentEl.children = [...(parentEl.children || []), el];
+          item.level = parentMenu.level + 1;
+          parentMenu.children = [...(parentMenu.children || []), item];
         });
 
-        return of(menus);
+        return ngxMenus;
       })
     ).subscribe(menus => {
       this.ngxMenus$.next(menus);
     })
-  }
-
-  /**
-   * 获取菜单及子菜单权限
-   */
-  private getMenuSecurity(menu: NgxMenu): string[] {
-    let securitys: string[] = [];
-    this.ngxMenus.map(item => {
-      if (item.url.includes(menu.url)) {
-        if (item.security && item.security.length > 0) {
-          securitys.push(...item.security);
-        }
-      }
-    });
-    return securitys;
   }
 
   /**
@@ -168,21 +191,6 @@ export class NgxMenusService implements OnDestroy {
     return array.find(item => {
       return menu.url.includes(item.url) && item.url != menu.url;
     });
-  }
-
-  /**
-   * 获取已存在的菜单
-   */
-  private findExistMenu(menu: NgxMenu): boolean {
-    let existMenu = this.ngxMenus.find(item => {
-      return menu.url == item.url;
-    });
-
-    if (existMenu) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
 }

@@ -25,6 +25,12 @@ const routes: Routes = [
       },
       {
         path: "material",
+        data: {
+          ngxMenu: {
+            name: "material",
+            icon: "icon-features",
+          }
+        },
         loadChildren: () => import("./material/material.module").then((m) => m.MaterialModule),
       }
     ]

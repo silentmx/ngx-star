@@ -2,6 +2,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { NGX_COMMON_COMPONENTS } from './components/index';
 import { NGX_COMMON_DIRECTIVES } from './directives/index';
+import './global-locale';
 import { NGX_COMMON_PIPES } from './pipes/index';
 
 /**
