@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NgxWarningDialog } from '@silentmx/ngx-star/material/components/alert/ngx-warning.dialog';
+import { NgxWarningDialog } from '@silentmx/ngx-star/material';
 
 @Component({
   templateUrl: "./dialog.component.html"
