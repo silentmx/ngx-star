@@ -153,6 +153,7 @@ export class NgxMenusService {
             for (let condition of securitys) {
               if (securityMap.get(condition) && securityMap.get(condition) == true) {
                 acc.push(item);
+                return acc;
               }
             }
           } else {
@@ -170,10 +171,10 @@ export class NgxMenusService {
           if (!parentMenu) {
             item.level = 0;
             ngxMenus.push(item);
-            return;
+          } else {
+            item.level = parentMenu.level + 1;
+            parentMenu.children = [...(parentMenu.children || []), item];
           }
-          item.level = parentMenu.level + 1;
-          parentMenu.children = [...(parentMenu.children || []), item];
         });
 
         return ngxMenus;
@@ -189,7 +190,10 @@ export class NgxMenusService {
    */
   private findParentMenu(menu: NgxMenu, array: NgxMenu[]): NgxMenu {
     return array.find(item => {
-      return menu.url.includes(item.url) && item.url != menu.url;
+      if (menu.url.includes(item.url) && item.url != menu.url) {
+        let subStr = menu.url.substring(item.url.length + 1);
+        return subStr.indexOf("/") < 0;
+      }
     });
   }
 
