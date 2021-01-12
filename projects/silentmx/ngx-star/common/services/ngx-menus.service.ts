@@ -60,27 +60,27 @@ export class NgxMenusService {
     routes: Routes, 
     parentPath: string = "", 
   ): Observable<NgxMenu[]> {
-    let menuList: NgxMenu[] = [];
-    let childrenMenus$: Observable<NgxMenu[]>[] = [];
-
+    let menus$: Observable<NgxMenu[]>[] = [];
     for (let route of routes) {
       let routePath = route.path ? `${parentPath}/${route.path}` : parentPath;
       if (route.data && route.data.ngxMenu && !route.redirectTo) {
-        menuList.push(new NgxMenu({
-          ...route.data.ngxMenu,
-          ...{
-            url: routePath,
-            security: route.data.security
-          }
-        }))
+        menus$.push(of([
+          new NgxMenu({
+            ...route.data.ngxMenu,
+            ...{
+              url: routePath,
+              security: route.data.security
+            }
+          })
+        ]));
       }
 
       if (route.children && route.children.length > 0) {
-        childrenMenus$.push(this.collectNgxMenuData(route.children, routePath));
+        menus$.push(this.collectNgxMenuData(route.children, routePath));
       }
 
       if (route.loadChildren) {
-        childrenMenus$.push(
+        menus$.push(
           this.loadRouteConfig(route).pipe(
             switchMap(routes => {
               return this.collectNgxMenuData(routes, routePath);
@@ -91,8 +91,7 @@ export class NgxMenusService {
     }
 
     return forkJoin([
-      of(menuList),
-      ...childrenMenus$
+      ...menus$
     ]).pipe(
       switchMap((data) => {
         return of([].concat.apply([], data));
@@ -192,7 +191,7 @@ export class NgxMenusService {
     let parent: NgxMenu;
 
     array.forEach(item => {
-      if (menu.url.startsWith(item.url) && item.url !== menu.url) {
+      if (menu.url.startsWith(item.url + "/") && item.url !== menu.url) {
         if (!parent) {
           parent = item;
         }

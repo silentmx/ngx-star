@@ -10,6 +10,14 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
+        path: "common",
+        loadChildren: () => import("./comm/comm.module").then((m) => m.CommModule),
+      },
+      {
+        path: "material",
+        loadChildren: () => import("./material/material.module").then((m) => m.MaterialModule),
+      },
+      {
         path: "toast",
         data: {
           ngxMenu: {
@@ -19,20 +27,6 @@ const routes: Routes = [
         },
         component: ToastComponent
       },
-      {
-        path: "common",
-        loadChildren: () => import("./comm/comm.module").then((m) => m.CommModule),
-      },
-      {
-        path: "material",
-        data: {
-          ngxMenu: {
-            name: "material",
-            icon: "icon-features",
-          }
-        },
-        loadChildren: () => import("./material/material.module").then((m) => m.MaterialModule),
-      }
     ]
   }
 
