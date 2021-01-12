@@ -67,5 +67,5 @@ export function provideForRootGuard(ngxMaterialService: NgxMaterialService): any
   if (ngxMaterialService) {
     throw new Error(`NgxMaterialModule.forRoot() called twice.`);
   }
-  return 'guarded';
+  return "ngxMaterialService";
 }

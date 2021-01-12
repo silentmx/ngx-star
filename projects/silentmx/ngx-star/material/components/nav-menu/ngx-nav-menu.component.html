@@ -40,7 +40,7 @@
               </mat-icon>
             </div>
           </mat-list-item>
-          <div @collapse *ngIf="treeControl.isExpanded(node)">
+          <div @collapse *ngIf="treeControl.isExpanded(node)" class="nested-menu">
             <ng-container matTreeNodeOutlet></ng-container>
           </div>
         </mat-nested-tree-node>

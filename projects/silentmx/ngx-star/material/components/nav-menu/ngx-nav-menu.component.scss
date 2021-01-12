@@ -8,13 +8,25 @@
   }
 }
 
+.ngx-menu-active{
+  * {
+    color: $ngx-nav-active-color;
+  }
+}
+
 .ngx-menu-container {
   height: calc(100vh);
   min-width: 250px;
   box-sizing: border-box;
-  background: linear-gradient(7deg, $ngx-nav-bg-end, $ngx-nav-bg-color);
+  background: linear-gradient(7deg, $ngx-nav-bg-end, $ngx-nav-bg-start);
   background-attachment: fixed !important;
   background-size: contain !important;
+
+  .mat-list-item, .nested-menu {
+    background: linear-gradient(7deg, $ngx-nav-bg-end, $ngx-nav-bg-start);
+    background-attachment: fixed !important;
+    background-size: contain !important;
+  }
 
   &.collapse {
     min-width: 70px !important;
@@ -29,7 +41,7 @@
     overflow: hidden;
     box-sizing: border-box;
     .menu-toggle {
-      color: set-text-color($ngx-nav-bg-color);;
+      color: set-text-color($ngx-nav-bg-start);;
     }
   }
   
@@ -45,15 +57,12 @@
   }
 
   .mat-list-item {
-    background: linear-gradient(7deg,$ngx-nav-bg-end, $ngx-nav-bg-color);
-    background-attachment: fixed !important;
-    background-size: contain !important;
     font-size: 14px;
-    color: set-text-color($ngx-nav-bg-color);
+    color: set-text-color($ngx-nav-bg-start);
   }
 
   .mat-icon-button {
-    color: set-text-color($ngx-nav-bg-color);
+    color: set-text-color($ngx-nav-bg-start);
   }
 
   .copy-right {

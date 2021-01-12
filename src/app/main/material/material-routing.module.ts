@@ -32,6 +32,10 @@ const routes: Routes = [
           }
         },
         component: DialogComponent
+      },
+      {
+        path: "other",
+        loadChildren: () => import("./other/other.module").then(m => m.OtherModule)
       }
     ]
   }

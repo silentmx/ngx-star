@@ -189,12 +189,21 @@ export class NgxMenusService {
    * @param menu
    */
   private findParentMenu(menu: NgxMenu, array: NgxMenu[]): NgxMenu {
-    return array.find(item => {
-      if (menu.url.includes(item.url) && item.url != menu.url) {
-        let subStr = menu.url.substring(item.url.length + 1);
-        return subStr.indexOf("/") < 0;
+    let parent: NgxMenu;
+
+    array.forEach(item => {
+      if (menu.url.startsWith(item.url) && item.url !== menu.url) {
+        if (!parent) {
+          parent = item;
+        }
+
+        if (item.url.length > parent.url.length) {
+          parent = item;
+        }
       }
     });
+
+    return parent;
   }
 
 }
