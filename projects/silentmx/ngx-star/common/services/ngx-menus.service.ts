@@ -35,7 +35,7 @@ export class NgxMenu {
 })
 export class NgxMenusService {
   // 存放从路由配置获取的导航菜单
-  ngxMenus$: BehaviorSubject<NgxMenu[]> = new BehaviorSubject<NgxMenu[]>([]);
+  private ngxMenus$: BehaviorSubject<NgxMenu[]> = new BehaviorSubject<NgxMenu[]>([]);
 
   constructor(
     private router: Router,
@@ -48,8 +48,88 @@ export class NgxMenusService {
         `[NgxMenusService]: trying to create multiple instances,but this service should be a singleton.`
       );
     } else {
-      this.genNgxMenuTree();
+      this.collectNgxMenuData(this.router.config).pipe(
+        map((menus: NgxMenu[]) => {
+          // 数据根据url去重复
+          return menus.reduce((acc, item) => {
+            let isExist: boolean = false;
+            acc = acc.map(value => {
+              if (value.url == item.url) {
+                isExist = true;
+                return item;
+              } else {
+                return value;
+              }
+            });
+            if (!isExist) {
+              acc.push(item);
+            }
+            return acc;
+          }, [])
+        })
+      ).subscribe((menus: NgxMenu[]) => {
+        this.ngxMenus$.next(menus);
+      });
     }
+  }
+
+  /**
+   * 获取菜单树
+   * @publicApi
+   */
+  getNgxMenuTree(): Observable<NgxMenu[]> {
+    return combineLatest([
+      this.ngxMenus$,
+      this.ngxSecurityService.dataSource
+    ]).pipe(
+      // 权限过滤
+      switchMap(([menus, securityMap]) => {
+        let scurityMenus: NgxMenu[] = [];
+        scurityMenus = menus.reduce((acc, menu) => {
+          // 获取权限（包括子菜单权限）
+          let securitys: string[] = menus.reduce((accs, el) => {
+            if (el.url == menu.url || el.url.startsWith(menu.url + "/")) {
+              if (el.security && el.security.length > 0) {
+                accs.push(...el.security);
+              }
+            }
+            return accs;
+          }, []);
+
+          // 权限判定
+          if (securitys && securitys.length > 0) {
+            for (let condition of securitys) {
+              if (securityMap.get(condition) && securityMap.get(condition) == true) {
+                acc.push(new NgxMenu(menu));
+                return acc;
+              }
+            }
+          } else {
+            acc.push(new NgxMenu(menu));
+          }
+
+          return acc;
+        }, []);
+
+        return of(scurityMenus);
+      }),
+      // 根据url生成菜单树
+      map((scurityMenus: NgxMenu[]) => {
+        let ngxMenusTree: NgxMenu[] = [];
+
+        scurityMenus.forEach(menu => {
+          let parentMenu = this.findParentMenu(menu, scurityMenus);
+          if (!parentMenu) {
+            menu.level = 0
+            ngxMenusTree.push(menu);
+          } else {
+            menu.level = parentMenu.level + 1;
+            parentMenu.children = [...(parentMenu.children || []), menu];
+          }
+        });
+        return ngxMenusTree;
+      })
+    )
   }
 
   /**
@@ -57,8 +137,8 @@ export class NgxMenusService {
    * @param route
    */
   private collectNgxMenuData(
-    routes: Routes, 
-    parentPath: string = "", 
+    routes: Routes,
+    parentPath: string = "",
   ): Observable<NgxMenu[]> {
     let menus$: Observable<NgxMenu[]>[] = [];
     for (let route of routes) {
@@ -91,6 +171,7 @@ export class NgxMenusService {
     }
 
     return forkJoin([
+      of([]),
       ...menus$
     ]).pipe(
       switchMap((data) => {
@@ -107,80 +188,6 @@ export class NgxMenusService {
     return (<any>this.router).configLoader
       .load(this.injector, route)
       .pipe(map((m: any) => m.routes));
-  }
-
-  /**
-   * 生成菜单树
-   */
-  private genNgxMenuTree() {
-    combineLatest([
-      this.collectNgxMenuData(this.router.config).pipe(
-        map(menus => {
-          // 数据根据url去重复
-          return menus.reduce((acc, item) => {
-            let isExist: boolean = false;
-            acc = acc.map(value => {
-              if (value.url == item.url) {
-                isExist = true;
-                return item;
-              } else {
-                return value;
-              }
-            });
-            if (!isExist) {
-              acc.push(item);
-            }
-            return acc;
-          }, [])
-        })
-      ),
-      this.ngxSecurityService.dataSource
-    ]).pipe(
-      switchMap(([menus, securityMap]) => {
-        // 权限过滤
-        return of(menus.reduce((acc, item) => {
-          // 获取权限（包括子菜单权限）
-          let securitys: string[] = menus.reduce((accs, el) => {
-            if (el.url.includes(item.url) && el.security && el.security.length > 0) {
-              accs.push(...el.security)
-            }
-            return accs;
-          }, []);
-
-          // 权限判定
-          if (securitys && securitys.length > 0) {
-            for (let condition of securitys) {
-              if (securityMap.get(condition) && securityMap.get(condition) == true) {
-                acc.push(item);
-                return acc;
-              }
-            }
-          } else {
-            acc.push(item);
-          }
-          return acc;
-        }, []));
-      }),
-      // 根据url生成菜单树
-      map((menus: NgxMenu[]) => {
-        let ngxMenus: NgxMenu[] = [];
-
-        menus.forEach(item => {
-          let parentMenu = this.findParentMenu(item, menus);
-          if (!parentMenu) {
-            item.level = 0;
-            ngxMenus.push(item);
-          } else {
-            item.level = parentMenu.level + 1;
-            parentMenu.children = [...(parentMenu.children || []), item];
-          }
-        });
-
-        return ngxMenus;
-      })
-    ).subscribe(menus => {
-      this.ngxMenus$.next(menus);
-    })
   }
 
   /**

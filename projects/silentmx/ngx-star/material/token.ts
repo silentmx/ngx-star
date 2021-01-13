@@ -22,7 +22,7 @@ export class NgxIconConfig {
   size?: string | number = "20";
 
   /**
-   * 自定义字体图标class
+   * 自定义字体图标class, 默认值‘iconfont’
    */
   fontSet?: string = "iconfont";
 

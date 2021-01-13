@@ -1,4 +1,6 @@
-@import "../../ngx-material-theme.scss";
+$ngx-nav-bg-start: #7b1fa2 !default;
+$ngx-nav-bg-end: #6e40c9 !default;
+$ngx-nav-active-color: #ffc107 !default;
 
 @function set-text-color($color) {
   @if (lightness($color) > 52%) {

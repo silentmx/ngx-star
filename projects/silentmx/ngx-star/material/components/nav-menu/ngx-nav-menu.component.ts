@@ -20,7 +20,7 @@ import { NgxMenu, NgxMenusService } from '@silentmx/ngx-star/common';
 export class NgxNavMenuComponent implements OnInit {
   // 菜单状态
   expand: boolean = localStorage.getItem("ngx-menu-expand") ?
-    localStorage.getItem("ngx-menu-expand") == "true" : false;
+    localStorage.getItem("ngx-menu-expand") == "true" : true;
   nowDate: Date = new Date();
 
   @Input("copyRight") copyRight: string;
@@ -36,7 +36,9 @@ export class NgxNavMenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataSource._data = this.ngxMenusService.ngxMenus$;
+    this.ngxMenusService.getNgxMenuTree().subscribe((menus: NgxMenu[]) => {
+      this.dataSource.data = menus;
+    });
   }
 
   hasChild = (_: number, node: NgxMenu) => {
