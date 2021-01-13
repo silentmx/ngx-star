@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 
 @Component({
   selector: "ngx-toggle",
@@ -45,29 +45,27 @@ import { Component, Input, OnInit, Renderer2 } from '@angular/core';
     ])
   ]
 })
-export class NgxToggleComponent implements OnInit {
-  @Input("theme") theme: string = "admin-dark-theme";
-  isActive: boolean = localStorage.getItem('ngx-theme') == "dark" ? true : false;;
+export class NgxToggleComponent {
+  private theme = localStorage.getItem("ngx-theme") ?
+    localStorage.getItem("ngx-theme") : "ngx-theme-default-light";
+
+  isActive: boolean = this.theme.includes("dark");
 
   constructor(private render: Renderer2) {
 
   }
 
-  ngOnInit() {
-    if (this.isActive) {
-      this.render.addClass(document.body, this.theme);
-    }
-  }
-
   changeState() {
     this.isActive = !this.isActive;
+    this.theme = localStorage.getItem("ngx-theme") ?
+      localStorage.getItem("ngx-theme") : "ngx-theme-default-light";
     if (this.isActive) {
-      localStorage.setItem('ngx-theme', 'dark');
-      this.render.addClass(document.body, this.theme);
+      this.theme = this.theme.replace("light", "dark");
     } else {
-      localStorage.setItem('ngx-theme', 'light');
-      this.render.removeClass(document.body, this.theme);
+      this.theme = this.theme.replace("dark", "light");
     }
+    localStorage.setItem('ngx-theme', this.theme);
+    this.render.setAttribute(document.body, "class", `mat-typography ${this.theme}`);
   }
 
 }

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgxIconConfig, NGX_ICON_CONFIG } from './token';
@@ -7,13 +7,16 @@ import { NgxIconConfig, NGX_ICON_CONFIG } from './token';
 export class NgxMaterialService {
   // 初始化状态
   private static _initState: string = "";
+  private renderer: Renderer2;
 
   constructor(
     private matIconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer,
+    private rendererFactory: RendererFactory2,
     @Inject(NGX_ICON_CONFIG) private ngxIconConfig: NgxIconConfig,
   ) {
     if (!NgxMaterialService._initState) {
+      this.renderer = this.rendererFactory.createRenderer(null, null);
       this.init();
     }
   }
@@ -21,6 +24,16 @@ export class NgxMaterialService {
   private init() {
     this.ngxIconConfig = { ...new NgxIconConfig(), ...this.ngxIconConfig };
     const head = document.getElementsByTagName("head")[0];
+    // 添加默认字体
+    const fontLink = document.createElement("link");
+    fontLink.id = "GoogleFont";
+    fontLink.rel = "stylesheet";
+    fontLink.href = "https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap";
+    head.appendChild(fontLink);
+
+    // 设置默认主题
+    let theme = localStorage.getItem('ngx-theme') ? localStorage.getItem('ngx-theme') : "ngx-theme-default-light";
+    this.renderer.setAttribute(document.body, "class", `mat-typography ${theme}`);
 
     // 默认添加Google Materi icon
     const link = document.createElement("link");

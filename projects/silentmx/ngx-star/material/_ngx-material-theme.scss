@@ -1,0 +1,55 @@
+@use "sass:meta";
+// Custom Theme for Angular material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+@import './components/nav-menu/ngx-nav-menu-theme';
+@import './ngx-material-common';
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// multiple themes
+@mixin ngx-material-theme($themes...) {
+  @each $name, $theme in meta.keywords($themes) {
+    $app-primary: map-get($map: $theme, $key: "primary");
+    $app-accent: map-get($map: $theme, $key: "accent");
+    $app-warn: map-get($map: $theme, $key: "warn");
+
+    .ngx-theme-#{$name}-light {
+      $app-theme-light: mat-light-theme((
+        color: (
+          primary: $app-primary,
+          accent: $app-accent,
+          warn: $app-warn
+        )
+      ));
+      @include ngx-nav-theme($app-theme-light);
+      @include ngx-material-common($app-theme-light);
+      @include angular-material-color($app-theme-light);
+    }
+
+    .ngx-theme-#{$name}-dark {
+      $app-theme-dark: mat-dark-theme((
+        color: (
+          primary: $app-primary,
+          accent: $app-accent,
+          warn: $app-warn
+        )
+      ));
+      @include ngx-nav-theme($app-theme-dark);
+      @include ngx-material-common($app-theme-dark);
+      @include angular-material-color($app-theme-dark);
+    }
+  }
+}
+
+// default theme
+@include ngx-material-theme(
+  $default: (
+    primary: mat-palette($mat-indigo),
+    accent: mat-palette($mat-pink, A200, A100, A400)
+  )
+);

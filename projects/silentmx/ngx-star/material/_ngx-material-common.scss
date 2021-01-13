@@ -1,0 +1,128 @@
+@mixin ngx-material-common($theme) {
+  $config: mat-get-color-config($theme);
+  $primary: map-get($map: $config, $key: primary);
+  $accent: map-get($map: $config, $key: accent);
+  $warn: map-get($map: $config, $key: warn);
+  $background: map-get($map: $config, $key: background);
+  $foreground: map-get($map: $config, $key: foreground);
+  $is-dark-theme: map-get($map: $config, $key: is-dark);
+
+  .table-sticky-container {
+    overflow: auto;
+    height: 100%;
+    &::-webkit-scrollbar {
+      height: 4px;
+      width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: mat-color($accent);
+    }
+    .mat-paginator {
+      bottom: 0px;
+      position: sticky;
+      z-index: 100;
+    }
+  }
+
+  .mat-form-field {
+    font-size: 13px;
+  }
+
+  .mat-list-item.active{
+    color: mat-color($primary) !important;
+  }
+
+
+  .drawer-toggle {
+    position: absolute;
+    visibility: visible;
+    left: -45px;
+    top: 40vh;
+    width: 45px;
+    border-radius: 25px 0 0 25px;
+    background-color: rgba($color: mat-color($accent), $alpha: 0.3);
+    &:hover {
+      background-color: rgba($color: mat-color($accent), $alpha: 0.8);
+    }
+  }
+
+  .cdk-drop-list {
+    border: solid 1px mat-color($foreground, divider);
+    border-radius: 4px;
+    min-height: 60px;
+    max-height: 95%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    display: block;
+    &::-webkit-scrollbar {
+      height: 4px;
+      width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba($color: mat-color($accent), $alpha: 1);
+    }
+  }
+
+  .cdk-drag {
+    padding: 20px 10px;
+    border-bottom: solid 1px mat-color($foreground, divider);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    color: mat-color($foreground, text);
+    background-color: mat-color($background, card);
+    cursor: move;
+
+    &:last-of-type {
+      border: none;
+    }
+  }
+
+  .cdk-drag-preview {
+    border: none;
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active  {
+    transition: background-color 50000s;
+    -webkit-text-fill-color: mat-color($foreground, text);
+  }
+
+  .mat-tab-group {
+    .mat-tab-header {
+      .mat-tab-labels {
+        height: 40px;
+        .mat-tab-label {
+          height: 40px;
+        }
+      }
+    }
+    
+    .mat-tab-body-wrapper {
+      overflow: hidden !important;
+      .mat-tab-body {
+        overflow: hidden !important;
+        .mat-tab-body-content {
+          overflow-x: visible;
+          overflow-y: auto;
+          padding-top: 10px;
+        }
+      }
+    }
+  }
+
+}

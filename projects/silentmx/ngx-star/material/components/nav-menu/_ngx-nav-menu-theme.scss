@@ -1,0 +1,61 @@
+@function set-text-color($color) {
+  @if (lightness($color) > 70%) {
+    @return rgba(0, 0, 0, .87); // Lighter backgorund, return dark color
+  } @else {
+    @return rgba(255, 255, 255, .87); // Darker background, return light color
+  }
+}
+
+@mixin ngx-nav-theme($theme) {
+  $config: mat-get-color-config($theme);
+  $primary: map-get($map: $config, $key: primary);
+  $accent: map-get($map: $config, $key: accent);
+  $warn: map-get($map: $config, $key: warn);
+  $background: map-get($map: $config, $key: background);
+  $foreground: map-get($map: $config, $key: foreground);
+  $is-dark-theme: map-get($map: $config, $key: is-dark);
+
+  .ngx-menu-active{
+    * {
+      color: mat-color($accent) !important;
+    }
+  }
+
+  .ngx-menu-container {
+    background: linear-gradient(7deg, mat-color($primary, A200), mat-color($primary));
+    background-attachment: fixed !important;
+    background-size: contain !important;
+
+    .mat-list-item, .nested-menu {
+      background: linear-gradient(7deg, mat-color($primary, A200), mat-color($primary)) !important;
+      background-attachment: fixed !important;
+      background-size: contain !important;
+    }
+
+    .ngx-menu-header {
+      .menu-toggle {
+        color: set-text-color(mat-color($primary));
+      }
+    }
+
+    .ngx-menu-body {
+      overflow: auto;
+      &::-webkit-scrollbar {
+        height: 4px;
+        width: 4px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: mat-color($accent);
+      }
+    }
+
+    .mat-list-item, .mat-icon-button {
+      color: set-text-color(mat-color($primary)) !important;
+    }
+  
+    .copy-right {
+      color: set-text-color(mat-color($primary, A200));
+    }
+  }
+
+}

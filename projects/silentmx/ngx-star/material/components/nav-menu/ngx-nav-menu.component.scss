@@ -1,34 +1,7 @@
-$ngx-nav-bg-start: #7b1fa2 !default;
-$ngx-nav-bg-end: #6e40c9 !default;
-$ngx-nav-active-color: #ffc107 !default;
-
-@function set-text-color($color) {
-  @if (lightness($color) > 52%) {
-    @return rgba(0, 0, 0, .87); // Lighter backgorund, return dark color
-  } @else {
-    @return rgba(255, 255, 255, .87); // Darker background, return light color
-  }
-}
-
-.ngx-menu-active{
-  * {
-    color: $ngx-nav-active-color;
-  }
-}
-
 .ngx-menu-container {
   height: calc(100vh);
   min-width: 250px;
   box-sizing: border-box;
-  background: linear-gradient(7deg, $ngx-nav-bg-end, $ngx-nav-bg-start);
-  background-attachment: fixed !important;
-  background-size: contain !important;
-
-  .mat-list-item, .nested-menu {
-    background: linear-gradient(7deg, $ngx-nav-bg-end, $ngx-nav-bg-start);
-    background-attachment: fixed !important;
-    background-size: contain !important;
-  }
 
   &.collapse {
     min-width: 70px !important;
@@ -42,36 +15,16 @@ $ngx-nav-active-color: #ffc107 !default;
     height: 64px;
     overflow: hidden;
     box-sizing: border-box;
-    .menu-toggle {
-      color: set-text-color($ngx-nav-bg-start);;
-    }
-  }
-  
-  .ngx-menu-body {
-    overflow: auto;
-    &::-webkit-scrollbar {
-      height: 4px;
-      width: 4px;
-    }
-    &::-webkit-scrollbar-thumb {
-      background: $ngx-nav-active-color;
-    }
   }
 
   .mat-list-item {
-    font-size: 14px;
-    color: set-text-color($ngx-nav-bg-start);
-  }
-
-  .mat-icon-button {
-    color: set-text-color($ngx-nav-bg-start);
+    font-size: 14px !important;
   }
 
   .copy-right {
     max-width: 250px;
     box-sizing: border-box;
     font-size: 12px;
-    color: set-text-color($ngx-nav-bg-end);
     padding: 16px;
     text-align: center;
     word-wrap:break-word

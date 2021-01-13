@@ -4,5 +4,7 @@ import { Component } from '@angular/core';
   templateUrl: "./toast.component.html"
 })
 export class ToastComponent {
-
+  themes = [
+    { name: "theme2", color: "#607d8b" }
+  ];
 }

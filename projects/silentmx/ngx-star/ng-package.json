@@ -2,7 +2,9 @@
   "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../../dist/silentmx/ngx-star",
   "assets": [
-    "./material/ngx-material-theme.scss"
+    "./material/_ngx-material-theme.scss",
+    "./material/_ngx-material-common.scss",
+    "./material/components/nav-menu/_ngx-nav-menu-theme.scss"
   ],
   "lib": {
     "entryFile": "index.ts"
