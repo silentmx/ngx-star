@@ -16,6 +16,7 @@ export class NgxThemeComponent {
   @Input("themes") set themes(themes: { name: string, color: string }[]) {
     this.themeList.push(...themes);
   }
+  @Input("cols") cols: number = 4;
 
   constructor(private render: Renderer2) {
 
