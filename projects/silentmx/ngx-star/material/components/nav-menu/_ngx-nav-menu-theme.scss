@@ -1,5 +1,5 @@
 @function set-text-color($color) {
-  @if (lightness($color) > 60%) {
+  @if (lightness($color) > 70%) {
     @return rgba(0, 0, 0, .87); // Lighter backgorund, return dark color
   } @else {
     @return rgba(255, 255, 255, .87); // Darker background, return light color
@@ -24,13 +24,13 @@
   $background-color: if(
     $is-dark-theme,
     linear-gradient(25deg, #6e40c9, mat-color($primary)),
-    linear-gradient(25deg, #6e40c9, mat-color($primary, lighter))
+    linear-gradient(25deg, #6e40c9, mat-color($primary))
   );
 
   $test-color: if(
     $is-dark-theme,
     set-text-color(mat-color($primary)),
-    set-text-color(mat-color($primary, lighter))
+    set-text-color(mat-color($primary))
   );
 
   .ngx-menu-container {
