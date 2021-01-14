@@ -33,7 +33,7 @@ export class NgxMaterialService {
 
     // 设置默认主题
     let theme = localStorage.getItem('ngx-theme') ? localStorage.getItem('ngx-theme') : "ngx-theme-default-light";
-    this.renderer.setAttribute(document.body, "class", `mat-typography ${theme}`);
+    this.renderer.setAttribute(document.body, "class", `mat-typography mat-app-background ${theme}`);
 
     // 默认添加Google Materi icon
     const link = document.createElement("link");

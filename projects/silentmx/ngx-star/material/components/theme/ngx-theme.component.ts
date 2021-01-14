@@ -27,7 +27,7 @@ export class NgxThemeComponent {
       localStorage.getItem("ngx-theme") : "ngx-theme-default-light";
     let themeMode = this.themeClass.includes("dark") ? "dark" : "light";
     let theme = `ngx-theme-${name}-${themeMode}`;
-    this.render.setAttribute(document.body, "class", `mat-typography ${theme}`);
+    this.render.setAttribute(document.body, "class", `mat-typography mat-app-background ${theme}`);
     localStorage.setItem("ngx-theme", theme);
     this.currentTheme = name;
   }

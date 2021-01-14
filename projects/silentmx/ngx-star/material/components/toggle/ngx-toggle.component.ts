@@ -65,7 +65,7 @@ export class NgxToggleComponent {
       this.theme = this.theme.replace("dark", "light");
     }
     localStorage.setItem('ngx-theme', this.theme);
-    this.render.setAttribute(document.body, "class", `mat-typography ${this.theme}`);
+    this.render.setAttribute(document.body, "class", `mat-typography mat-app-background ${this.theme}`);
   }
 
 }
