@@ -1,5 +1,5 @@
 @function set-text-color($color) {
-  @if (lightness($color) > 70%) {
+  @if (lightness($color) > 60%) {
     @return rgba(0, 0, 0, .87); // Lighter backgorund, return dark color
   } @else {
     @return rgba(255, 255, 255, .87); // Darker background, return light color
@@ -21,20 +21,32 @@
     }
   }
 
+  $background-color: if(
+    $is-dark-theme,
+    linear-gradient(25deg, #6e40c9, mat-color($primary)),
+    linear-gradient(25deg, #6e40c9, mat-color($primary, lighter))
+  );
+
+  $test-color: if(
+    $is-dark-theme,
+    set-text-color(mat-color($primary)),
+    set-text-color(mat-color($primary, lighter))
+  );
+
   .ngx-menu-container {
-    background: linear-gradient(7deg, mat-color($primary, A200), mat-color($primary));
+    background: $background-color;
     background-attachment: fixed !important;
     background-size: contain !important;
 
     .mat-list-item, .nested-menu {
-      background: linear-gradient(7deg, mat-color($primary, A200), mat-color($primary)) !important;
+      background: $background-color !important;
       background-attachment: fixed !important;
       background-size: contain !important;
     }
 
     .ngx-menu-header {
       .menu-toggle {
-        color: set-text-color(mat-color($primary));
+        color: $test-color;
       }
     }
 
@@ -50,11 +62,11 @@
     }
 
     .mat-list-item, .mat-icon-button {
-      color: set-text-color(mat-color($primary)) !important;
+      color: $test-color !important;
     }
   
     .copy-right {
-      color: set-text-color(mat-color($primary, A200));
+      color: set-text-color(#6e40c9);
     }
   }
 
