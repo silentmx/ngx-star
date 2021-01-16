@@ -8,4 +8,3 @@ import '@angular/common/locales/global/ar-AE';
 import '@angular/common/locales/global/ar-BH';
 import '@angular/common/locales/global/ar-DJ';
 import '@angular/common/locales/global/zh-Hans';
-

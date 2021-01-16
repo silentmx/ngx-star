@@ -27,6 +27,10 @@ const routes: Routes = [
         },
         component: ToastComponent
       },
+      {
+        path: "echarts",
+        loadChildren: () => import("./echarts/echarts.module").then(m => m.EchartsModule),
+      }
     ]
   }
 

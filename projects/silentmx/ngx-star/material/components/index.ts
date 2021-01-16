@@ -1,4 +1,4 @@
-import { Provider } from '@angular/compiler/src/core';
+import { Provider } from '@angular/core';
 import { NgxWarningDialog } from './alert/ngx-warning.dialog';
 import { NgxNavMenuComponent } from './nav-menu/ngx-nav-menu.component';
 import { NgxThemeComponent } from './theme/ngx-theme.component';

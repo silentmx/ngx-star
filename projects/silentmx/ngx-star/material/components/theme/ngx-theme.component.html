@@ -7,7 +7,7 @@
       [matRippleCentered]="true"
       [matRippleCentered]="true"
       [style.backgroundColor]="theme.color">
-      <mat-icon color="#FFFFFF" fontSet="material-icons" size="24" *ngIf="theme.name == currentTheme">check_circle</mat-icon>
+      <mat-icon color="#FFFFFF" fontSet="material-icons" size="24" *ngIf="themeClass.includes(theme.name)">check_circle</mat-icon>
     </div>
   </mat-grid-tile>
 </mat-grid-list>

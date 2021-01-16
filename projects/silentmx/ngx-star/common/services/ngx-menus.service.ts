@@ -18,7 +18,7 @@ export class NgxMenu {
 
   constructor(data: NgxMenu) {
     if (data) {
-      for (var property in data) {
+      for (let property in data) {
         if (data.hasOwnProperty(property))
           (<any>this)[property] = (<any>data)[property];
       }

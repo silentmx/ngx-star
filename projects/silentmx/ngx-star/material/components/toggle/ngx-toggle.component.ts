@@ -1,5 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Renderer2 } from '@angular/core';
+import { Component, Inject, Renderer2 } from '@angular/core';
+import { NGX_THEME_MODE } from '@silentmx/ngx-star/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: "ngx-toggle",
@@ -46,26 +48,28 @@ import { Component, Renderer2 } from '@angular/core';
   ]
 })
 export class NgxToggleComponent {
-  private theme = localStorage.getItem("ngx-theme") ?
-    localStorage.getItem("ngx-theme") : "ngx-theme-default-light";
 
-  isActive: boolean = this.theme.includes("dark");
-
-  constructor(private render: Renderer2) {
+  constructor(
+    private render: Renderer2,
+    @Inject(NGX_THEME_MODE) public ngxThemeMode: BehaviorSubject<string>,
+  ) {
 
   }
 
   changeState() {
-    this.isActive = !this.isActive;
-    this.theme = localStorage.getItem("ngx-theme") ?
-      localStorage.getItem("ngx-theme") : "ngx-theme-default-light";
-    if (this.isActive) {
-      this.theme = this.theme.replace("light", "dark");
+    let themeClass = localStorage.getItem("ngx-theme-class") ?
+      localStorage.getItem("ngx-theme-class") : "ngx-theme-default";
+    this.render.removeClass(document.body, `${themeClass}-${this.ngxThemeMode.value}`);
+    if (this.ngxThemeMode.value == "dark") {
+      this.ngxThemeMode.next("light");
     } else {
-      this.theme = this.theme.replace("dark", "light");
+      this.ngxThemeMode.next("dark");
     }
-    localStorage.setItem('ngx-theme', this.theme);
-    this.render.setAttribute(document.body, "class", `mat-typography mat-app-background ${this.theme}`);
+    localStorage.setItem("ngx_theme_mode", this.ngxThemeMode.value);
+    this.render.addClass(
+      document.body,
+      `${themeClass}-${this.ngxThemeMode.value}`
+    );
   }
 
 }

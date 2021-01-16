@@ -1,6 +1,6 @@
 <span class="ngx-toggle">
-  <div class="ngx-toggle-track" [class.active]="isActive"></div>
-  <div class="ngx-toggle-thumb" [@toggle]="isActive ? 'active' : 'inactive'" (click)="changeState()">
+  <div class="ngx-toggle-track" [class.active]="ngxThemeMode.value == 'dark'"></div>
+  <div class="ngx-toggle-thumb" [@toggle]="ngxThemeMode.value == 'dark' ? 'active' : 'inactive'" (click)="changeState()">
     <svg t="1609228299354" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7434" width="16"
       height="16" xmlns:xlink="http://www.w3.org/1999/xlink">
       <defs>

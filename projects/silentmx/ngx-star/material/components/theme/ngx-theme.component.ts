@@ -1,4 +1,6 @@
-import { Component, Input, Renderer2 } from '@angular/core';
+import { Component, Inject, Input, Renderer2 } from '@angular/core';
+import { NGX_THEME_MODE } from '@silentmx/ngx-star/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: "ngx-theme",
@@ -6,29 +8,30 @@ import { Component, Input, Renderer2 } from '@angular/core';
   styleUrls: ["./ngx-theme.component.scss"]
 })
 export class NgxThemeComponent {
-  private themeClass: string = localStorage.getItem("ngx-theme") ?
-    localStorage.getItem("ngx-theme") : "ngx-theme-default-light";
-  currentTheme: string = this.themeClass.split("-")[2];
+  themeClass: string = localStorage.getItem("ngx-theme-class") ?
+    localStorage.getItem("ngx-theme-class") : "ngx-theme-default";
   themeList = [
     { name: "default", color: "#3f51b5" }
   ];
-
   @Input("themes") set themes(themes: { name: string, color: string }[]) {
     this.themeList.push(...themes);
   }
   @Input("cols") cols: number = 4;
 
-  constructor(private render: Renderer2) {
+  constructor(
+    private render: Renderer2,
+    @Inject(NGX_THEME_MODE) public ngxThemeMode: BehaviorSubject<string>,
+  ) {
 
   }
 
   changeTheme(name: string) {
-    this.themeClass = localStorage.getItem("ngx-theme") ?
-      localStorage.getItem("ngx-theme") : "ngx-theme-default-light";
-    let themeMode = this.themeClass.includes("dark") ? "dark" : "light";
-    let theme = `ngx-theme-${name}-${themeMode}`;
-    this.render.setAttribute(document.body, "class", `mat-typography mat-app-background ${theme}`);
-    localStorage.setItem("ngx-theme", theme);
-    this.currentTheme = name;
+    this.render.removeClass(document.body, `${this.themeClass}-${this.ngxThemeMode.value}`);
+    this.themeClass = `ngx-theme-${name}`;
+    localStorage.setItem("ngx-theme-class", this.themeClass);
+    this.render.addClass(
+      document.body,
+      `${this.themeClass}-${this.ngxThemeMode.value}`
+    );
   }
 }

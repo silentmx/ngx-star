@@ -34,3 +34,15 @@ export const NGX_LOCALE_ID =
  * 模块forRoot静态方法调用守卫
  */
 export const NGX_FORROOT_GUARD = new InjectionToken<void>("NGX_FORROOT_GUARD");
+
+/**
+ * 主题模式依赖注入
+ */
+export const NGX_THEME_MODE = new InjectionToken<BehaviorSubject<string>>("NGX_THEME_MODE", {
+  providedIn: "root",
+  factory: (): BehaviorSubject<string> => {
+    return new BehaviorSubject<string>(((): string => {
+      return localStorage.getItem("ngx_theme_mode") ? localStorage.getItem("ngx_theme_mode") : "light";
+    })())
+  }
+})
