@@ -1,9 +1,14 @@
 import { AfterViewInit, Directive, ElementRef, Inject, Input, OnDestroy } from '@angular/core';
 import { deepCopy, NGX_THEME_MODE } from '@silentmx/ngx-star/core';
 import * as Echarts from 'echarts';
-import { BehaviorSubject, combineLatest, isObservable, Observable, Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, isObservable, Observable, of, Subscription } from 'rxjs';
+import { delay, switchMap } from 'rxjs/operators';
 import { NgxEchartConfig, NGX_ECHART_CONFIG } from '../ngx-echarts.config';
+
+export interface PieData {
+  name: string;
+  value: string;
+}
 
 @Directive({
   selector: "[ngxPieEchart]",
@@ -22,16 +27,18 @@ import { NgxEchartConfig, NGX_ECHART_CONFIG } from '../ngx-echarts.config';
 export class NgxPieEchartDirective implements AfterViewInit, OnDestroy {
   private echartInstance: any = undefined;
   private renderSubscription = Subscription.EMPTY;
-  private options: BehaviorSubject<Object> | Observable<Object>;
+  private _data$: BehaviorSubject<PieData[]> = new BehaviorSubject<PieData[]>([]);
 
-  @Input("ngxPieEchart")
-  set ngxPieEchartOptions(options: Object | BehaviorSubject<Object> | Observable<Object>) {
-    if (isObservable(options)) {
-      this.options = options;
+  @Input("ngxPieEchart") set data(data: PieData[] | Observable<PieData[]>) {
+    if (isObservable(data)) {
+      data.subscribe(res => {
+        this._data$.next(res);
+      })
     } else {
-      this.options = new BehaviorSubject<Object>(options);
+      this._data$.next(data);
     }
-  };
+  }
+  @Input("title") title: string = "";
 
   constructor(
     private elementRef: ElementRef,
@@ -44,16 +51,38 @@ export class NgxPieEchartDirective implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.renderSubscription?.unsubscribe();
     this.renderSubscription = combineLatest([
-      this.options,
-      this.ngxThemeMode$
+      this.ngxThemeMode$,
+      this._data$
     ]).pipe(
       delay(0),
-    ).subscribe(([options, mode]) => {
+      switchMap(([_, data]) => {
+        let options = {
+          title: {
+            text: this.title,
+          },
+          tooltip: {
+            formatter: '{b} : {c} ({d}%)'
+          },
+          series: [{
+            type: 'pie',
+            data: data,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }]
+        };
+        return of(options);
+      })
+    ).subscribe((options) => {
       let echartOptions = deepCopy(new NgxEchartConfig(), this.ngxEchartConfig, options);
       if (this.echartInstance) {
         this.echartInstance.dispose();
       }
-      this.echartInstance = Echarts.init(this.elementRef.nativeElement, mode);
+      this.echartInstance = Echarts.init(this.elementRef.nativeElement, this.ngxThemeMode$.value);
       this.echartInstance.setOption(echartOptions);
     });
   }

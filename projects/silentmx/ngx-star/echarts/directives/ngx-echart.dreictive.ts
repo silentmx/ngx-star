@@ -6,7 +6,7 @@ import { delay } from 'rxjs/operators';
 import { NgxEchartConfig, NGX_ECHART_CONFIG } from '../ngx-echarts.config';
 
 @Directive({
-  selector: "[ngxPieEchart]",
+  selector: "[ngxEchart]",
   host: {
     "style": `
       position: relative;
@@ -22,16 +22,20 @@ import { NgxEchartConfig, NGX_ECHART_CONFIG } from '../ngx-echarts.config';
 export class NgxEchartDirective implements AfterViewInit, OnDestroy {
   private echartInstance: any = undefined;
   private renderSubscription = Subscription.EMPTY;
-  private options: BehaviorSubject<Object> | Observable<Object>;
+  private options$: BehaviorSubject<Object> = new BehaviorSubject<Object>({});
 
   @Input("ngxEchart")
   set ngxPieEchartOptions(options: Object | BehaviorSubject<Object> | Observable<Object>) {
     if (isObservable(options)) {
-      this.options = options;
+      options.subscribe(res => {
+        this.options$.next(res);
+      })
     } else {
-      this.options = new BehaviorSubject<Object>(options);
+      this.options$.next(options);
     }
   };
+
+  @Input("title") title: string = "";
 
   constructor(
     private elementRef: ElementRef,
@@ -44,12 +48,21 @@ export class NgxEchartDirective implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.renderSubscription?.unsubscribe();
     this.renderSubscription = combineLatest([
-      this.options,
+      this.options$,
       this.ngxThemeMode$
     ]).pipe(
       delay(0),
     ).subscribe(([options, mode]) => {
-      let echartOptions = deepCopy(new NgxEchartConfig(), this.ngxEchartConfig, options);
+      let echartOptions = deepCopy(
+        new NgxEchartConfig(),
+        this.ngxEchartConfig,
+        options,
+        {
+          title: {
+            text: this.title,
+          }
+        }
+      );
       if (this.echartInstance) {
         this.echartInstance.dispose();
       }
